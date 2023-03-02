@@ -11,17 +11,17 @@ typedef std::pair<int, int> coordinate;
 class BaseMap
 {
 protected:
-    std::map<coordinate, BaseObject *> map_;
+    std::map<coordinate, std::shared_ptr<BaseObject>> map_;
     int x_;
     int y_;
     BaseMap(int x, int y);
     bool IsBorder(const coordinate &coord) const;
     bool IsOutOfBorder(const coordinate &coord) const;
     virtual void UpdateMap(const std::map<uint64_t, ACTION::Action> &changes) = 0;
-    virtual void SetObject(const coordinate &coord, BaseObject *obj) = 0;
+    virtual void SetObject(const coordinate &coord, std::shared_ptr<BaseObject> obj) = 0;
     
 public:
     virtual ~BaseMap();
-    virtual const BaseObject *GetObject(const coordinate &coord) const;
+    virtual std::shared_ptr<const BaseObject> GetObject(const coordinate &coord) const;
     virtual void Operate(ACTION::Action act) = 0;
 };

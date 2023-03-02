@@ -10,12 +10,12 @@ BaseObject::BaseObject(OBJECT::ObjectType type) : type_(type)
 
 BaseObject::~BaseObject() {}
 
-const BaseObject *BaseObject::GetAround(DIRECTION::Direction dir) const
+std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir) const
 {
     return arounds_.at(dir);
 }
 
-bool BaseObject::SetAround(DIRECTION::Direction dir, const BaseObject *obj)
+bool BaseObject::SetAround(DIRECTION::Direction dir, std::shared_ptr<const BaseObject> obj)
 {
     arounds_.at(dir) = obj;
     return true;

@@ -14,11 +14,11 @@ Canvas::Canvas(int x, int y): x_(x), y_(y)
         y_ = 0;
     }
 
-    canvas_ = new CanvasElement*[y_];
-    for (int i = 0; i < y_; ++i)
+    canvas_ = std::make_unique<std::unique_ptr<CanvasElement[]>[]>(x_);
+    for (int i = 0; i < x_; ++i)
     {
-        canvas_[i] = new CanvasElement[x_];
-        for (int j = 0; j < x_; ++j)
+        canvas_[i] = std::make_unique<CanvasElement[]>(y_);
+        for (int j = 0; j < y_; ++j)
         {
             canvas_[i][j] = BLANK;
         }
@@ -33,34 +33,9 @@ Canvas::Canvas(int x, int y): x_(x), y_(y)
     ColorPrint_[BLACK] = BlackPrint;
 }
 
-Canvas::Canvas(int x, int y, const CanvasElement** canvas): x_(x), y_(y)
-{
-    if (x < 0 || y < 0)
-    {
-        x_ = 0;
-        y_ = 0;
-    }
-
-    canvas_ = new CanvasElement*[y_];
-    for (int i = 0; i < y_; ++i)
-    {
-        canvas_[i] = new CanvasElement[x_];
-        for (int j = 0; j < x_; ++j)
-        {
-            canvas_[i][j] = canvas[i][j];
-        }
-    }
-}
-
 Canvas::~Canvas()
 {
-    for (int i = 0; i < y_; ++i)
-    {
-        delete [] canvas_[i];
-        canvas_[i] = NULL;
-    }
-    delete [] canvas_;
-    canvas_ = NULL;
+    
 }
 
 void Canvas::CanvasSet(int x, int y, OBJECT::ObjectType element)
@@ -90,9 +65,9 @@ inline void Canvas::ScreenClear() const
 void Canvas::CanvasPrint() const
 {
     ScreenClear();
-    for (int j = 0; j < y_; ++j)
+    for (int i = 0; i < x_; ++i)
     {
-        for (int i = 0; i < x_; ++i)
+        for (int j = 0; j < y_; ++j)
         {
             (*(ColorPrint_[canvas_[i][j].color_]))(canvas_[i][j].ch_);
         }

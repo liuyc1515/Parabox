@@ -35,7 +35,7 @@ class Canvas
 private:
     int x_;
     int y_;
-    CanvasElement** canvas_;
+    std::unique_ptr<std::unique_ptr<CanvasElement[]>[]> canvas_;
     void(* ColorPrint_[COLOR_COUNT])(char);
 public:
     /*
@@ -43,7 +43,6 @@ public:
      * y from high to low
      */
     Canvas(int x, int y);
-    Canvas(int x, int y, const CanvasElement** canvas);
     ~Canvas();
     void CanvasSet(int x, int y, OBJECT::ObjectType element);
     void CanvasReset(int x, int y);

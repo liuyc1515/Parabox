@@ -4,7 +4,7 @@ BlockObject::BlockObject() : BaseObject(OBJECT::BLOCK) {}
 
 std::map<uint64_t, ACTION::Action> BlockObject::Move(ACTION::Action act) const
 {
-    const BaseObject * around;
+    std::shared_ptr<const BaseObject> around;
     std::map<uint64_t, ACTION::Action> ret_act;
     around = GetAround(ActionToDirection(act));
     if (around == NULL)
@@ -15,7 +15,7 @@ std::map<uint64_t, ACTION::Action> BlockObject::Move(ACTION::Action act) const
     else
     {
         ret_act = around->Move(act);
-        if (ret_act.at((uint64_t)around) == act || ret_act.at((uint64_t)around) == ACTION::DISAPPEAR)
+        if (ret_act.at((uint64_t)around.get()) == act || ret_act.at((uint64_t)around.get()) == ACTION::DISAPPEAR)
         {
             ret_act.insert({(uint64_t)this, act});
         }

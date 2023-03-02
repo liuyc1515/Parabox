@@ -2,14 +2,14 @@
 
 BaseMap::BaseMap(int x, int y) : x_(x), y_(y)
 {
-    BaseObject *tmp_obj = NULL;
+    std::shared_ptr<BaseObject> tmp_obj(NULL);
     for (int i = 0; i < x_; ++i)
     {
         for (int j = 0; j < y_; ++j)
         {
             if (IsBorder({i, j}))
             {
-                tmp_obj = new WallObject();
+                tmp_obj = std::make_shared<WallObject>();
                 map_.insert({{i, j}, tmp_obj});
             }
         }
@@ -24,14 +24,13 @@ BaseMap::~BaseMap()
         {
             if (IsBorder({i, j}) && map_.find({i, j}) != map_.end())
             {
-                delete map_.at({i, j});
                 map_.at({i, j}) = NULL;
             }
         }
     }
 }
 
-const BaseObject *BaseMap::GetObject(const coordinate &coord) const
+std::shared_ptr<const BaseObject> BaseMap::GetObject(const coordinate &coord) const
 {
     if (map_.find(coord) == map_.end())
     {

@@ -10,7 +10,7 @@ class BaseAgent
 {
 private:
     Canvas canvas_;
-    BaseMap *map_;
+    std::unique_ptr<BaseMap> map_;
     int x_;
     int y_;
     virtual void UpdateCanvas();
