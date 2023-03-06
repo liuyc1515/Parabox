@@ -1,50 +1,40 @@
 #include <maps/base_map.h>
 
-BaseMap::BaseMap(int x, int y) : x_(x), y_(y)
+BaseMap::BaseMap()
 {
-    std::shared_ptr<BaseObject> tmp_obj(NULL);
-    for (int i = 0; i < x_; ++i)
-    {
-        for (int j = 0; j < y_; ++j)
-        {
-            if (IsBorder({i, j}))
-            {
-                tmp_obj = std::make_shared<WallObject>();
-                map_.insert({{i, j}, tmp_obj});
-            }
-        }
-    }
+    std::cout << "start init base map" << std::endl;
 }
 
 BaseMap::~BaseMap()
 {
-    for (int i = 0; i < x_; ++i)
-    {
-        for (int j = 0; j < y_; ++j)
-        {
-            if (IsBorder({i, j}) && map_.find({i, j}) != map_.end())
-            {
-                map_.at({i, j}) = NULL;
-            }
-        }
-    }
+
 }
 
-std::shared_ptr<const BaseObject> BaseMap::GetObject(const coordinate &coord) const
+OBJECT::ObjectType BaseMap::GetObjectType(const Coordinate &coord) const
 {
     if (map_.find(coord) == map_.end())
     {
-        return NULL;
+        return OBJECT::OBJ_COUNT;
     }
     return map_.at(coord);
 }
 
-bool BaseMap::IsBorder(const coordinate &coord) const
+bool BaseMap::IsBorder(const Coordinate &coord) const
 {
     return coord.first == 0 || coord.second == 0 || coord.first == x_ - 1 || coord.second == y_ - 1;
 }
 
-bool BaseMap::IsOutOfBorder(const coordinate &coord) const
+bool BaseMap::IsOutOfBorder(const Coordinate &coord) const
 {
     return coord.first < 0 || coord.second < 0 || coord.first > x_ - 1 || coord.second > y_ - 1;
+}
+
+int BaseMap::GetMapX() const
+{
+    return x_;
+}
+
+int BaseMap::GetMapY() const
+{
+    return y_;
 }

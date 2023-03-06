@@ -31,11 +31,16 @@ inline void PurplePrint(char ch)
 
 inline void DarkGreenPrint(char ch)
 {
-    printf("\036[;31m %c \033[0m", ch);
+    printf("\033[;36m %c \033[0m", ch);
 }
 
 inline void BlackPrint(char ch)
 {
     printf("\033[;30m %c \033[0m", ch);
+}
+
+inline void WhitePrint(char ch)
+{
+    printf("\033[;37m %c \033[0m", ch);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <canvas/color_print.h>
-#include <objects/object_types.h>
+#include <utils/types.h>
 
 enum ElementColor
 {
@@ -12,6 +12,7 @@ enum ElementColor
     PURPLE,
     DARKGREEN,
     BLACK,
+    WHITE,
 
     COLOR_COUNT
 };
@@ -24,7 +25,7 @@ struct CanvasElement
 };
 
 const CanvasElement BLANK = {' ', BLACK};
-const CanvasElement WALL = {'W', RED};
+const CanvasElement WALL = {'W', WHITE};
 const CanvasElement OPERATOR = {'P', YELLOW};
 const CanvasElement BLOCK = {'B', GREEN};
 
@@ -48,4 +49,6 @@ public:
     void CanvasReset(int x, int y);
     inline void ScreenClear() const;
     void CanvasPrint() const;
+    int GetCanvasX() const;
+    int GetCanvasY() const;
 };

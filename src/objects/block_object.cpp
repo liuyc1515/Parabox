@@ -1,6 +1,10 @@
 #include <objects/block_object.h>
 
-BlockObject::BlockObject() : BaseObject(OBJECT::BLOCK) {}
+BlockObject::BlockObject(std::shared_ptr<const ObjectManager> object_manager,
+std::shared_ptr<const std::map<uint64_t, std::shared_ptr<const BaseObject>>> objects) : BaseObject(OBJECT::BLOCK, object_manager, objects) 
+{
+
+}
 
 std::map<uint64_t, ACTION::Action> BlockObject::Move(ACTION::Action act) const
 {
@@ -15,7 +19,7 @@ std::map<uint64_t, ACTION::Action> BlockObject::Move(ACTION::Action act) const
     else
     {
         ret_act = around->Move(act);
-        if (ret_act.at((uint64_t)around.get()) == act || ret_act.at((uint64_t)around.get()) == ACTION::DISAPPEAR)
+        if (ret_act.at(around->GetID()) == act || ret_act.at(around->GetID()) == ACTION::DISAPPEAR)
         {
             ret_act.insert({(uint64_t)this, act});
         }

@@ -1,10 +1,24 @@
 #include <agents/base_agent.h>
 
-BaseAgent::BaseAgent(int canvas_x, int canvas_y, int op_x, int op_y): canvas_(canvas_x, canvas_y), x_(canvas_x), y_(canvas_y)
+BaseAgent::BaseAgent() : objects_(std::make_shared<std::map<uint64_t, std::shared_ptr<const BaseObject>>>())
 {
-    map_ = std::make_unique<BaseStaticMap>(canvas_x, canvas_y, coordinate(op_x, op_y));
-    UpdateCanvas();
-    canvas_.CanvasPrint();
+    std::cout << "start init base agent" << std::endl;
+    std::shared_ptr<BaseObject> tmp_object(NULL);
+    object_manager_ = std::make_shared<ObjectManager>();
+    map_manager_ = std::make_shared<MapManager>();
+    for (int i = 0; i < map_manager_->GetMapX(); ++i)
+    {
+        for (int j = 0; j < map_manager_->GetMapY(); ++j)
+        {
+            tmp_object = NewObjectByType(map_manager_->GetObjectType({i, j}));
+            object_manager_->SetObjectInfo(tmp_object->GetID(), {{i, j}, tmp_object->GetType()});
+            objects_->insert({tmp_object->GetID(), tmp_object});
+            if (tmp_object->GetType() == OBJECT::PLAYER)
+            {
+                operator_ = std::move(tmp_object);
+            }
+        }
+    }
 }
 
 BaseAgent::~BaseAgent()
@@ -12,31 +26,84 @@ BaseAgent::~BaseAgent()
     
 }
 
-void BaseAgent::UpdateCanvas()
+inline std::shared_ptr<BaseObject> BaseAgent::NewObjectByType(OBJECT::ObjectType type) const
 {
-    std::shared_ptr<const BaseObject> tmp_obj;
-    for (int i = 0; i < x_; ++i)
+    std::shared_ptr<BaseObject> tmp_object(NULL);
+    switch (type)
     {
-        for (int j = 0; j < y_; ++j)
+    case OBJECT::BLOCK:
+        tmp_object = std::make_shared<BlockObject>(object_manager_, objects_);
+        break;
+    case OBJECT::VOID:
+        tmp_object = std::make_shared<VoidObject>(object_manager_, objects_);
+        break;
+    case OBJECT::PLAYER:
+        tmp_object = std::make_shared<PlayerObject>(object_manager_, objects_);
+        break;
+    case OBJECT::WALL:
+        tmp_object = std::make_shared<WallObject>(object_manager_, objects_);
+        break;
+    default:
+        break;
+    }
+    return std::move(tmp_object);
+}
+
+void BaseAgent::UpdateObjects(const std::map<uint64_t, ACTION::Action> &changes)
+{
+    std::shared_ptr<const BaseObject> tmp_object(NULL);
+    std::map<uint64_t, ObjectInfo> new_map;
+    for (int i = 0; i < GetMapX(); ++i)
+    {
+        for (int j = 0; j < GetMapY(); ++j)
         {
-            tmp_obj = map_->GetObject({i, j});
-            if (tmp_obj != NULL)
+            tmp_object = objects_->at(object_manager_->GetObjectAtCoord({i, j}));
+            if (tmp_object.get() != NULL)
             {
-                // std::cout << "Update " << i << " " << j << std::endl;
-                canvas_.CanvasSet(i, j, tmp_obj->GetType());
+                if (changes.find(tmp_object->GetID()) != changes.end())
+                {
+                    if (tmp_object->GetType() != OBJECT::VOID)
+                    {
+                        new_map.insert({tmp_object->GetID(), {map_manager_->CalcCoordByAction({i, j}, changes.at(tmp_object->GetID())), tmp_object->GetType()}});
+                    }
+                    else
+                    {
+                        new_map.insert({tmp_object->GetID(), {object_manager_->GetObjectCoord(operator_->GetID()), tmp_object->GetType()}});
+                    }
+                }
+                else
+                {
+                    new_map.insert({tmp_object->GetID(), {{i, j}, tmp_object->GetType()}});
+                }
             }
             else
             {
-                std::cerr << "Failed to update canvas : Incomplete Map" << std::endl;
+                std::cerr << "Failed to update object : Incomplete Map" << std::endl;
             }
         }
     }
+
+    object_manager_->SetWholeMap(new_map);
+}
+
+std::shared_ptr<const ObjectManager> BaseAgent::GetObjectManager() const
+{
+    return object_manager_;
 }
 
 void BaseAgent::OperatorMove(ACTION::Action act)
 {
-    // std::cout << "operate move " << act << std::endl;
-    map_->Operate(act);
-    UpdateCanvas();
-    canvas_.CanvasPrint();
+    std::map<uint64_t, ACTION::Action> changes;
+    changes = operator_->Move(act);
+    UpdateObjects(changes);
+}
+
+int BaseAgent::GetMapX() const
+{
+    return map_manager_->GetMapX();
+}
+
+int BaseAgent::GetMapY() const
+{
+    return map_manager_->GetMapY();
 }

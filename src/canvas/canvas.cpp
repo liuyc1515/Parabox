@@ -8,6 +8,7 @@ void CanvasElement::operator = (const CanvasElement &element)
 
 Canvas::Canvas(int x, int y): x_(x), y_(y)
 {
+    std::cout << "start init canvas with x : " << x_ << " and y : " << y_ << std::endl; 
     if (x < 0 || y < 0)
     {
         x_ = 0;
@@ -31,6 +32,7 @@ Canvas::Canvas(int x, int y): x_(x), y_(y)
     ColorPrint_[PURPLE] = PurplePrint;
     ColorPrint_[DARKGREEN] = DarkGreenPrint;
     ColorPrint_[BLACK] = BlackPrint;
+    ColorPrint_[WHITE] = WhitePrint;
 }
 
 Canvas::~Canvas()
@@ -74,4 +76,14 @@ void Canvas::CanvasPrint() const
         std::cout << std::endl;
     }
     // std::cout << "canvas print finished" << std::endl;
+}
+
+int Canvas::GetCanvasX() const
+{
+    return x_;
+}
+
+int Canvas::GetCanvasY() const
+{
+    return y_;
 }

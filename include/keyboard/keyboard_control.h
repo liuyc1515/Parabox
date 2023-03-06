@@ -5,6 +5,8 @@
 #include <mutex>
 #include <stdio.h>
 
+#include <utils/types.h>
+
 #if defined(__APPLE__) || defined(__linux__)
 #include <sys/select.h>
 #include <termios.h>
@@ -22,28 +24,16 @@ const int KEY_D = 100;
 
 const int KEY_ESC = 27;
 
-namespace ACTION
-{
-    enum Action
-    {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT,
-        DISAPPEAR,
-        ESC,
-        NOP
-    };
-}
-
 class KeyboardControl
 {
 private:
     static std::queue<ACTION::Action> buffer_;
     static std::mutex queue_mtx_;
+    bool stop_;
     int GetChar();
 public:
     KeyboardControl();
     void ActionCapture();
+    void Stop();
     ACTION::Action ActionGet();
 };

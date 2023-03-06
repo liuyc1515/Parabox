@@ -5,13 +5,13 @@ std::mutex KeyboardControl::queue_mtx_;
 
 KeyboardControl::KeyboardControl()
 {
-    
+    stop_ = false;
 }
 
 void KeyboardControl::ActionCapture()
 {
     int key;
-    while (true)
+    while (!stop_)
     {
         key = GetChar();
         queue_mtx_.lock();
@@ -36,6 +36,12 @@ void KeyboardControl::ActionCapture()
         }
         queue_mtx_.unlock();
     }
+    return;
+}
+
+void KeyboardControl::Stop()
+{
+    stop_ = true;
 }
 
 ACTION::Action KeyboardControl::ActionGet()

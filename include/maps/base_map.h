@@ -1,27 +1,24 @@
 #pragma once
 
-#include <objects/player_object.h>
-#include <objects/void_object.h>
-#include <objects/wall_object.h>
-#include <objects/block_object.h>
-#include <canvas/canvas.h>
+#include <iostream>
 
-typedef std::pair<int, int> coordinate;
+#include <utils/types.h>
 
 class BaseMap
 {
 protected:
-    std::map<coordinate, std::shared_ptr<BaseObject>> map_;
+    std::map<Coordinate, OBJECT::ObjectType> map_;
     int x_;
     int y_;
-    BaseMap(int x, int y);
-    bool IsBorder(const coordinate &coord) const;
-    bool IsOutOfBorder(const coordinate &coord) const;
-    virtual void UpdateMap(const std::map<uint64_t, ACTION::Action> &changes) = 0;
-    virtual void SetObject(const coordinate &coord, std::shared_ptr<BaseObject> obj) = 0;
+    BaseMap();
+    bool IsBorder(const Coordinate &coord) const;
+    bool IsOutOfBorder(const Coordinate &coord) const;
+    virtual void SetObject(const Coordinate &coord, OBJECT::ObjectType obj) = 0;
     
 public:
     virtual ~BaseMap();
-    virtual std::shared_ptr<const BaseObject> GetObject(const coordinate &coord) const;
-    virtual void Operate(ACTION::Action act) = 0;
+    virtual OBJECT::ObjectType GetObjectType(const Coordinate &coord) const;
+    virtual Coordinate CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const = 0;
+    int GetMapX() const;
+    int GetMapY() const;
 };
