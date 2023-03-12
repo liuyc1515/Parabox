@@ -19,11 +19,35 @@ Coordinate ObjectManager::GetObjectCoord(uint64_t object_id) const
     return object_coord_map_.at(object_id).coordinate_;
 }
 
-uint64_t ObjectManager::GetObjectAtCoord(const Coordinate &coord) const
+MAP::MapID ObjectManager::GetObjectMap(uint64_t object_id) const
+{
+    if (object_coord_map_.find(object_id) == object_coord_map_.end())
+    {
+        return MAP::MAP_COUNT;
+    }
+    return object_coord_map_.at(object_id).map_id_;
+}
+
+std::vector<uint64_t> ObjectManager::GetObjectInMap(MAP::MapID map_id) const
+{
+    std::vector<uint64_t> objects;
+    for (auto obj : object_coord_map_)
+    {
+        if (obj.second.map_id_ == map_id)
+        {
+            objects.push_back(obj.first);
+        }
+    }
+    return std::move(objects);
+}
+
+uint64_t ObjectManager::GetObjectInMapAtCoord(MAP::MapID map_id, const Coordinate &coord) const
 {
     for (auto obj : object_coord_map_)
     {
-        if (coord.first == obj.second.coordinate_.first && coord.second == obj.second.coordinate_.second)
+        if (coord.first == obj.second.coordinate_.first && 
+            coord.second == obj.second.coordinate_.second &&
+            map_id == obj.second.map_id_)
         {
             return obj.first;
         }

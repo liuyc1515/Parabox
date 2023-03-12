@@ -1,5 +1,7 @@
 #include <canvas/canvas.h>
 
+void(* Canvas::ColorPrint_[COLOR_COUNT])(char);
+
 void CanvasElement::operator = (const CanvasElement &element)
 {
     ch_ = element.ch_;
@@ -9,22 +11,73 @@ void CanvasElement::operator = (const CanvasElement &element)
 Canvas::Canvas(int x, int y): x_(x), y_(y)
 {
     std::cout << "start init canvas with x : " << x_ << " and y : " << y_ << std::endl; 
+
     if (x < 0 || y < 0)
     {
         x_ = 0;
         y_ = 0;
     }
 
-    canvas_ = std::make_unique<std::unique_ptr<CanvasElement[]>[]>(x_);
+    canvas_ = std::move(std::make_unique<std::unique_ptr<CanvasElement[]>[]>(x_));
     for (int i = 0; i < x_; ++i)
     {
-        canvas_[i] = std::make_unique<CanvasElement[]>(y_);
+        canvas_[i] = std::move(std::make_unique<CanvasElement[]>(y_));
+        for (int j = 0; j < y_; ++j)
+        {
+            canvas_[i][j] = BLANK;
+        }
+    }
+}
+
+Canvas::Canvas()
+{
+    InitCanvas(0, 0);
+}
+
+Canvas::~Canvas()
+{
+    
+}
+
+void Canvas::InitCanvas(int x, int y)
+{
+    if (x_ == x && y_ == y)
+    {
+        return;
+    }
+    
+    if (x < 0 || y < 0)
+    {
+        x_ = 0;
+        y_ = 0;
+    }
+
+    canvas_ = std::move(std::make_unique<std::unique_ptr<CanvasElement[]>[]>(x_));
+    for (int i = 0; i < x_; ++i)
+    {
+        canvas_[i] = std::move(std::make_unique<CanvasElement[]>(y_));
         for (int j = 0; j < y_; ++j)
         {
             canvas_[i][j] = BLANK;
         }
     }
 
+    SetCanvasX(x);
+    SetCanvasY(y);
+}
+
+void Canvas::SetCanvasX(int x)
+{
+    x_ = x;
+}
+
+void Canvas::SetCanvasY(int y)
+{
+    y_ = y;
+}
+
+void Canvas::InitColors()
+{
     ColorPrint_[RED] = RedPrint;
     ColorPrint_[GREEN] = GreenPrint;
     ColorPrint_[BLUE] = BluePrint;
@@ -35,24 +88,19 @@ Canvas::Canvas(int x, int y): x_(x), y_(y)
     ColorPrint_[WHITE] = WhitePrint;
 }
 
-Canvas::~Canvas()
+void Canvas::CanvasSet(const Coordinate &coord, OBJECT::ObjectType element)
 {
-    
-}
-
-void Canvas::CanvasSet(int x, int y, OBJECT::ObjectType element)
-{
-    if (x >= x_ || y >= y_ || x < 0 || y < 0)
+    if (coord.first >= x_ || coord.second >= y_ || coord.first < 0 || coord.second < 0)
     {
         return;
     }
 
-    canvas_[x][y] = elements[element];
+    canvas_[coord.first][coord.second] = elements[element];
 }
 
-void Canvas::CanvasReset(int x, int y)
+void Canvas::CanvasReset(const Coordinate &coord)
 {
-    CanvasSet(x, y, OBJECT::VOID);
+    CanvasSet(coord, OBJECT::VOID);
 }
 
 inline void Canvas::ScreenClear() const

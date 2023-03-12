@@ -27,7 +27,7 @@ const int KEY_ESC = 27;
 class KeyboardControl
 {
 private:
-    static std::queue<ACTION::Action> buffer_;
+    static std::queue<KEYBOARD::Action> buffer_;
     static std::mutex queue_mtx_;
     bool stop_;
     int GetChar();
@@ -35,5 +35,5 @@ public:
     KeyboardControl();
     void ActionCapture();
     void Stop();
-    ACTION::Action ActionGet();
+    KEYBOARD::Action ActionGet();
 };

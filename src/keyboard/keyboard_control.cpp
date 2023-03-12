@@ -1,6 +1,6 @@
 #include <keyboard/keyboard_control.h>
 
-std::queue<ACTION::Action> KeyboardControl::buffer_ = std::queue<ACTION::Action>();
+std::queue<KEYBOARD::Action> KeyboardControl::buffer_ = std::queue<KEYBOARD::Action>();
 std::mutex KeyboardControl::queue_mtx_;
 
 KeyboardControl::KeyboardControl()
@@ -18,20 +18,20 @@ void KeyboardControl::ActionCapture()
         switch (key)
         {
         case KEY_W:
-            buffer_.push(ACTION::UP);
+            buffer_.push(KEYBOARD::UP);
             break;
         case KEY_S:
-            buffer_.push(ACTION::DOWN);
+            buffer_.push(KEYBOARD::DOWN);
             break;
         case KEY_A:
-            buffer_.push(ACTION::LEFT);
+            buffer_.push(KEYBOARD::LEFT);
             break;
         case KEY_D:
-            buffer_.push(ACTION::RIGHT);
+            buffer_.push(KEYBOARD::RIGHT);
             break;
         case KEY_ESC:
-            buffer_ = std::queue<ACTION::Action>();
-            buffer_.push(ACTION::ESC);
+            buffer_ = std::queue<KEYBOARD::Action>();
+            buffer_.push(KEYBOARD::ESC);
             return;
         }
         queue_mtx_.unlock();
@@ -44,15 +44,15 @@ void KeyboardControl::Stop()
     stop_ = true;
 }
 
-ACTION::Action KeyboardControl::ActionGet()
+KEYBOARD::Action KeyboardControl::ActionGet()
 {
     queue_mtx_.lock();
     if (buffer_.empty())
     {
         queue_mtx_.unlock();
-        return ACTION::NOP;
+        return KEYBOARD::NOP;
     }
-    ACTION::Action act = buffer_.front();
+    KEYBOARD::Action act = buffer_.front();
     buffer_.pop();
     queue_mtx_.unlock();
     return act;

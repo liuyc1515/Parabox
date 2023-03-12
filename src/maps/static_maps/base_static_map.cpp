@@ -1,12 +1,9 @@
 #include <static_maps/base_static_map.h>
 
-BaseStaticMap::BaseStaticMap() : BaseMap()
+BaseStaticMap::BaseStaticMap(int x, int y) : BaseMap()
 {
-    std::cout << "start init base static map" << std::endl;
-    x_ = 8;
-    y_ = 8;
-
-    Coordinate operator_coord(1, 1);
+    x_ = x;
+    y_ = y;
 
     for (int i = 0; i < x_; ++i)
     {
@@ -22,12 +19,6 @@ BaseStaticMap::BaseStaticMap() : BaseMap()
             }
         }
     }
-
-    SetObject(operator_coord, OBJECT::PLAYER);
-    SetObject({2, 2}, OBJECT::BLOCK);
-    SetObject({3, 2}, OBJECT::BLOCK);
-    SetObject({3, 3}, OBJECT::BLOCK);
-
 }
 
 BaseStaticMap::~BaseStaticMap()
@@ -82,4 +73,60 @@ Coordinate BaseStaticMap::CalcCoordByAction(const Coordinate &coord, ACTION::Act
         new_coord.second = coord.second;
     }
     return new_coord;
+}
+
+Coordinate BaseStaticMap::GetVoidBorder(DIRECTION::Direction dir) const
+{
+    std::cout << "base static map get void border from dir " << dir << std::endl;
+    Coordinate coord(-1, -1);
+
+    std::function<Coordinate(int, int, int)> GetVoidFromLine = [this] (int axis, int value, int boundary)
+    {
+        Coordinate coord(-1, -1);
+        int min_distance_to_mid = boundary;
+
+        assert(axis == 0 || axis == 1);
+
+        for (int i = 0; i < boundary; ++i)
+        {
+            if (GetObjectInitType({value * (1 - axis) + i * axis, value * axis + i * (1 - axis)}) == OBJECT::VOID)
+            {
+                if (std::abs(i - boundary / 2) < min_distance_to_mid)
+                {
+                    coord.first = value * (1 - axis) + i * axis;
+                    coord.second = value * axis + i * (1 - axis);
+                    min_distance_to_mid = std::abs(i - boundary / 2);
+                }
+            }
+        }
+
+        return coord;
+    };
+
+    switch (dir)
+    {
+    case DIRECTION::UP:
+        coord = GetVoidFromLine(0, 0, GetMapY());
+        break;
+    case DIRECTION::DOWN:
+        coord = GetVoidFromLine(0, GetMapX() - 1, GetMapY());
+        break;
+    case DIRECTION::LEFT:
+        coord = GetVoidFromLine(1, 0, GetMapX());
+        break;
+    case DIRECTION::RIGHT:
+        coord = GetVoidFromLine(1, GetMapY() - 1, GetMapX());
+        break;
+    default:
+        break;
+    }
+
+    std::cout << "base static map get coord " << coord.first << ", " << coord.second << std::endl;
+    
+    return coord;
+}
+
+int BaseStaticMap::GetID() const
+{
+    return map_id_;
 }

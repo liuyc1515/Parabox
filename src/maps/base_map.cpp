@@ -10,7 +10,7 @@ BaseMap::~BaseMap()
 
 }
 
-OBJECT::ObjectType BaseMap::GetObjectType(const Coordinate &coord) const
+OBJECT::ObjectType BaseMap::GetObjectInitType(const Coordinate &coord) const
 {
     if (map_.find(coord) == map_.end())
     {

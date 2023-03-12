@@ -65,3 +65,29 @@ inline DIRECTION::Direction ActionToDirection(ACTION::Action act)
 
     return ret_dir;
 }
+
+inline DIRECTION::Direction OppositeDirection(DIRECTION::Direction dir)
+{
+    DIRECTION::Direction ret_dir;
+
+    switch (dir)
+    {
+    case DIRECTION::UP:
+        ret_dir = DIRECTION::DOWN;
+        break;
+    case DIRECTION::DOWN:
+        ret_dir = DIRECTION::UP;
+        break;
+    case DIRECTION::LEFT:
+        ret_dir = DIRECTION::RIGHT;
+        break;
+    case DIRECTION::RIGHT:
+        ret_dir = DIRECTION::LEFT;
+        break;
+    default:
+        ret_dir = DIRECTION::HERE;
+        break;
+    }
+
+    return ret_dir;
+}

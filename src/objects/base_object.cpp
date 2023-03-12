@@ -2,10 +2,13 @@
 
 BaseObject::BaseObject(OBJECT::ObjectType type, 
 std::shared_ptr<const ObjectManager> object_manager, 
+std::shared_ptr<const MapManager> map_manager,
 std::shared_ptr<const std::map<uint64_t, std::shared_ptr<const BaseObject>>> objects) : type_(type) 
 {
     object_manager_ = std::move(object_manager);
+    map_manager_ = std::move(map_manager);
     objects_ = std::move(objects);
+    std::cout << "init object " << type << std::endl;
 }
 
 BaseObject::~BaseObject() 
@@ -22,10 +25,44 @@ std::shared_ptr<const BaseObject> BaseObject::GetObjectByID(uint64_t object_id) 
     return objects_->at(object_id);
 }
 
-std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir) const
+MAP::MapID BaseObject::GetObjectMapID() const
 {
-    Coordinate self_coord = object_manager_->GetObjectCoord((uint64_t)this);
-    uint64_t around_object_id = object_manager_->GetObjectAtCoord(CalcCoordByDirection(self_coord, dir));
+    return object_manager_->GetObjectMap(GetID());
+}
+
+bool BaseObject::HasVoidBorder(DIRECTION::Direction dir, MAP::MapID map_id) const
+{
+    Coordinate coord = map_manager_->GetVoidBorder(dir, map_id);
+    return !(coord.first == -1 && coord.second == -1);
+}
+
+Coordinate BaseObject::CalcCoordInMap(const Coordinate &coord, MAP::MapID from_map_id, MAP::MapID to_map_id, DIRECTION::Direction dir) const
+{
+    Coordinate new_coord(-1, -1);
+
+    if (from_map_id == to_map_id)
+    {
+        new_coord = coord;
+    }
+    else
+    {
+        if (map_manager_->IsBorder(from_map_id, coord))
+        {
+            
+        }
+        else
+        {
+            new_coord = CalcCoordByDirection(map_manager_->GetVoidBorder(OppositeDirection(dir), to_map_id), OppositeDirection(dir));
+        }
+    }
+
+    return new_coord;
+}
+
+std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir, MAP::MapID map_id) const
+{
+    Coordinate self_coord = CalcCoordInMap(object_manager_->GetObjectCoord(GetID()), object_manager_->GetObjectMap(GetID()), map_id, dir);
+    uint64_t around_object_id = object_manager_->GetObjectInMapAtCoord(map_id, CalcCoordByDirection(self_coord, dir));
     if (around_object_id == 0)
     {
         return std::shared_ptr<const BaseObject>(NULL);
@@ -79,4 +116,9 @@ Coordinate BaseObject::CalcCoordByDirection(const Coordinate &coord, DIRECTION::
 uint64_t BaseObject::GetID() const
 {
     return (uint64_t)this;
+}
+
+MAP::MapID BaseObject::GetInnerMapID() const
+{
+    return MAP::MAP_COUNT;
 }

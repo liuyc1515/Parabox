@@ -1,55 +1,65 @@
 #include <parabox.h>
 
-Parabox::Parabox() :
-agent_(),
+Parabox::Parabox(std::unique_ptr<BaseAgent> agent, int x, int y) :
+agent_(std::move(agent)),
 keyboard_(),
-canvas_(agent_.GetMapX(), agent_.GetMapY())
+canvas_(x, y)
 {
-    std::cout << "start ini parabox" << std::endl;
-    object_manager_ = agent_.GetObjectManager();
+    std::cout << "start init parabox" << std::endl;
+    object_manager_ = agent_->GetObjectManager();
+    map_manager_ = agent_->GetMapManager();
     UpdateCanvas();
-    std::cout << "finished ini parabox" << std::endl;
+    std::cout << "finished init parabox" << std::endl;
     canvas_.CanvasPrint();
 }
 
 void Parabox::UpdateCanvas()
 {
-    OBJECT::ObjectType type;
-    for (int i = 0; i < canvas_.GetCanvasX(); ++i)
+    std::vector<uint64_t> object_ids = std::move(object_manager_->GetObjectInMap(map_manager_->GetCurrentMapID()));
+
+    canvas_.InitCanvas(agent_->GetCurrentMapX(), agent_->GetCurrentMapY());
+
+    for (auto object_id : object_ids)
     {
-        for (int j = 0; j < canvas_.GetCanvasY(); ++j)
-        {
-            type = object_manager_->GetObjectType(object_manager_->GetObjectAtCoord({i, j}));
-            if (type != OBJECT::OBJ_COUNT)
-            {
-                // std::cout << "Update " << i << " " << j << std::endl;
-                canvas_.CanvasSet(i, j, type);
-            }
-            else
-            {
-                std::cerr << "Failed to update canvas : Incomplete Map" << std::endl;
-            }
-        }
+        canvas_.CanvasSet(object_manager_->GetObjectCoord(object_id), object_manager_->GetObjectType(object_id));
     }
+}
+
+std::unique_ptr<BaseAgent> Parabox::NewAgentByType(AGENT::AgentType agent_type)
+{
+    std::cout << "start create agent" << std::endl;
+    std::unique_ptr<BaseAgent> tmp_object;
+    switch (agent_type)
+    {
+    case AGENT::BASE:
+        tmp_object = std::move(std::make_unique<BaseAgent>());
+        break;
+    case AGENT::INNER:
+        tmp_object = std::move(std::make_unique<InnerMapAgent>());
+        break;
+    default:
+        break;
+    }
+    return std::move(tmp_object);
 }
 
 void Parabox::Start()
 {
     std::thread keyboard_capture(&KeyboardControl::ActionCapture, keyboard_);
 
-    ACTION::Action act = ACTION::NOP;
+    KEYBOARD::Action act = KEYBOARD::NOP;
     while (true)
     {
         act = keyboard_.ActionGet();
         switch (act)
         {
-        case ACTION::ESC:
+        case KEYBOARD::ESC:
             goto exit;
-        case ACTION::UP:
-        case ACTION::DOWN:
-        case ACTION::LEFT:
-        case ACTION::RIGHT:
-            agent_.OperatorMove(act);
+        case KEYBOARD::UP:
+        case KEYBOARD::DOWN:
+        case KEYBOARD::LEFT:
+        case KEYBOARD::RIGHT:
+            agent_->OperatorMove((ACTION::Action)(ACTION::UP + (act - KEYBOARD::UP)));
             UpdateCanvas();
             canvas_.CanvasPrint();
             break;
