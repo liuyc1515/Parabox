@@ -23,7 +23,9 @@ std::map<uint64_t, ACTION::Action> BlockObject::Move(ACTION::Action act, MAP::Ma
         ret_act = around->Move(act);
         if (ret_act.at(around->GetID()) == act || ret_act.at(around->GetID()) == act + (ACTION::LEFT_INTO - ACTION::LEFT) || ret_act.at(around->GetID()) == ACTION::DISAPPEAR)
         {
+            std::cout << "block move to " << act << std::endl;
             ret_act.insert({GetID(), act});
+            std::cout << "block move to " << ret_act.at(GetID()) << " after insert" << std::endl;
         }
         else if (ret_act.at(around->GetID()) == ACTION::INTO_ALLOWED)
         {

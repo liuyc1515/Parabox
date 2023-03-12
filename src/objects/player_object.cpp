@@ -35,12 +35,7 @@ std::map<uint64_t, ACTION::Action> PlayerObject::Move(ACTION::Action act, MAP::M
                 {
                     ret_act.at(GetID()) = (ACTION::Action)(act + (ACTION::UP_INTO - ACTION::UP));
                 }
-                
             }
-        }
-        else if (ret_act.at(around->GetID()) == ACTION::INTO_ALLOWED_OPPOSITE)
-        {
-            
         }
         else
         {

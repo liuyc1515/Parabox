@@ -45,7 +45,10 @@ std::map<uint64_t, ACTION::Action> MapObject::Move(ACTION::Action act, MAP::MapI
         {
             if (HasVoidBorder(ActionToDirection(act), GetInnerMapID()) && IsEatableType(around->GetType()))
             {
-                ret_act.insert({GetID(), ACTION::INTO_ALLOWED_OPPOSITE});
+                recursive_act = around->Move(DirectionToAction(OppositeDirection(ActionToDirection(act))), GetInnerMapID());
+                ret_act.insert(recursive_act.begin(), recursive_act.end());
+                ret_act.at(around->GetID()) = (ACTION::Action)(recursive_act.at(around->GetID()) + ACTION::LEFT_INTO - ACTION::LEFT);
+                ret_act.insert({GetID(), act});
             }
             else if (HasVoidBorder(OppositeDirection((ActionToDirection(act))), GetInnerMapID()))
             {

@@ -29,6 +29,7 @@ protected:
 public:
     virtual ~BaseObject();
     virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act) const = 0;
+    virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act, MAP::MapID map_id) const = 0;
     virtual uint64_t GetID() const;
     virtual MAP::MapID GetInnerMapID() const;
     OBJECT::ObjectType GetType() const;
