@@ -1,62 +1,107 @@
 #include <manager/map_manager.h>
 
-std::shared_ptr<const BaseMap> MapManager::MAPS[MAP::MAP_COUNT];
-
-void MapManager::InitMaps()
-{
-    MAPS[MAP::STATIC_1] = std::make_shared<const StaticMap1>();
-    MAPS[MAP::STATIC_2] = std::make_shared<const StaticMap2>();
-    MAPS[MAP::INNER_1] = std::make_shared<const InnerMapMap1>();
-
-    std::cout << "finish init maps" << std::endl;
-}
-
 MapManager::MapManager()
 {
-    current_map_id_ = MAP::INNER_1;
+    current_map_id_ = NewMap(MAP::INNER_1);
 }
 
 Coordinate MapManager::CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const
 {
-    return MAPS[current_map_id_]->CalcCoordByAction(coord, act);
+    if (maps_.find(current_map_id_) == maps_.end())
+    {
+        return Coordinate(-1, -1);
+    }
+    return maps_.at(current_map_id_)->CalcCoordByAction(coord, act);
 }
 
-Coordinate MapManager::GetVoidBorder(DIRECTION::Direction dir, MAP::MapID map_id) const
+Coordinate MapManager::GetVoidBorder(DIRECTION::Direction dir, uint64_t map_id) const
 {
-    return MAPS[map_id]->GetVoidBorder(dir);
+    if (maps_.find(map_id) == maps_.end())
+    {
+        return Coordinate(-1, -1);
+    }
+    return maps_.at(map_id)->GetVoidBorder(dir);
 }
 
-OBJECT::ObjectType MapManager::GetObjectInitType(MAP::MapID map_id, const Coordinate &coord) const
+OBJECT::ObjectType MapManager::GetObjectInitType(uint64_t map_id, const Coordinate &coord) const
 {
-    return MAPS[map_id]->GetObjectInitType(coord);
+    if (maps_.find(map_id) == maps_.end())
+    {
+        return OBJECT::OBJ_COUNT;
+    }
+    return maps_.at(map_id)->GetObjectInitType(coord);
 }
 
-MAP::MapID MapManager::GetCurrentMapID() const
+uint64_t MapManager::GetCurrentMapID() const
 {
     return current_map_id_;
 }
 
-void MapManager::SetCurrentMapID(MAP::MapID map_id)
+uint64_t MapManager::NewMap(MAP::MapType map_type)
+{
+    std::shared_ptr<const BaseMap> tmp_map(NULL);
+    uint64_t tmp_map_id = 0;
+    switch (map_type)
+    {
+    case MAP::STATIC_1:
+        tmp_map = std::make_shared<const StaticMap1>();
+        tmp_map_id = tmp_map->GetID();
+        break;
+    case MAP::STATIC_2:
+        tmp_map = std::make_shared<const StaticMap2>();
+        tmp_map_id = tmp_map->GetID();
+        break;
+    case MAP::INNER_1:
+        tmp_map = std::make_shared<const InnerMapMap1>();
+        tmp_map_id = tmp_map->GetID();
+        break;
+    default:
+        break;
+    }
+    
+    maps_.insert({tmp_map_id, std::move(tmp_map)});
+    return tmp_map_id;
+}
+
+void MapManager::SetCurrentMapID(uint64_t map_id)
 {
     current_map_id_ = map_id;
 }
 
-int MapManager::GetMapX(MAP::MapID map_id) const
+int MapManager::GetMapX(uint64_t map_id) const
 {
-    return MAPS[map_id]->GetMapX();
+    if (maps_.find(map_id) == maps_.end())
+    {
+        return -1;
+    }
+    return maps_.at(map_id)->GetMapX();
 }
 
-int MapManager::GetMapY(MAP::MapID map_id) const
+int MapManager::GetMapY(uint64_t map_id) const
 {
-    return MAPS[map_id]->GetMapY();
+    if (maps_.find(map_id) == maps_.end())
+    {
+        return -1;
+    }
+    return maps_.at(map_id)->GetMapY();
 }
 
-bool MapManager::IsBorder(MAP::MapID map_id, const Coordinate &coord) const
+bool MapManager::IsBorder(uint64_t map_id, const Coordinate &coord) const
 {
-    return MAPS[map_id]->IsBorder(coord);
+    if (maps_.find(map_id) == maps_.end())
+    {
+        std::cerr << "Cannot find requested map" << std::endl;
+        return true;
+    }
+    return maps_.at(map_id)->IsBorder(coord);
 }
 
-bool MapManager::IsOutOfBorder(MAP::MapID map_id, const Coordinate &coord) const
+bool MapManager::IsOutOfBorder(uint64_t map_id, const Coordinate &coord) const
 {
-    return MAPS[map_id]->IsOutOfBorder(coord);
+    if (maps_.find(map_id) == maps_.end())
+    {
+        std::cerr << "Cannot find requested map" << std::endl;
+        return true;
+    }
+    return maps_.at(map_id)->IsOutOfBorder(coord);
 }

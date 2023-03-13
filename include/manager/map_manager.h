@@ -10,21 +10,21 @@
 class MapManager
 {
 private:
-    MAP::MapID current_map_id_;
-    std::stack<MAP::MapID> maps_stack_;
+    uint64_t current_map_id_;
+    std::stack<uint64_t> maps_stack_;
 public:
-    static std::shared_ptr<const BaseMap> MAPS[MAP::MAP_COUNT];
-    static void InitMaps();
+    std::map<uint64_t, std::shared_ptr<const BaseMap>> maps_;
 
     MapManager();
     Coordinate CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const;
-    Coordinate GetVoidBorder(DIRECTION::Direction dir, MAP::MapID map_id) const;
-    OBJECT::ObjectType GetObjectInitType(MAP::MapID map_id, const Coordinate &coord) const;
-    MAP::MapID GetCurrentMapID() const;
-    int GetMapX(MAP::MapID map_id) const;
-    int GetMapY(MAP::MapID map_id) const;
-    bool IsBorder(MAP::MapID map_id, const Coordinate &coord) const;
-    bool IsOutOfBorder(MAP::MapID map_id, const Coordinate &coord) const;
+    Coordinate GetVoidBorder(DIRECTION::Direction dir, uint64_t map_id) const;
+    OBJECT::ObjectType GetObjectInitType(uint64_t map_id, const Coordinate &coord) const;
+    uint64_t GetCurrentMapID() const;
+    int GetMapX(uint64_t map_id) const;
+    int GetMapY(uint64_t map_id) const;
+    bool IsBorder(uint64_t map_id, const Coordinate &coord) const;
+    bool IsOutOfBorder(uint64_t map_id, const Coordinate &coord) const;
 
-    void SetCurrentMapID(MAP::MapID map_id);
+    uint64_t NewMap(MAP::MapType map_type);
+    void SetCurrentMapID(uint64_t map_id);
 };

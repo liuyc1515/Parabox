@@ -29,6 +29,11 @@ bool BaseMap::IsOutOfBorder(const Coordinate &coord) const
     return coord.first < 0 || coord.second < 0 || coord.first > x_ - 1 || coord.second > y_ - 1;
 }
 
+uint64_t BaseMap::GetID() const
+{
+    return (uint64_t)this;
+}
+
 int BaseMap::GetMapX() const
 {
     return x_;

@@ -11,7 +11,6 @@
 class BaseStaticMap : public BaseMap
 {
 protected:
-    int map_id_;
     virtual void SetObject(const Coordinate &coord, OBJECT::ObjectType obj);
     virtual void SetSpecificObjects() = 0;
 public:
@@ -19,5 +18,4 @@ public:
     BaseStaticMap(int x, int y);
     virtual Coordinate CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const;
     virtual Coordinate GetVoidBorder(DIRECTION::Direction dir) const;
-    int GetID() const;
 };

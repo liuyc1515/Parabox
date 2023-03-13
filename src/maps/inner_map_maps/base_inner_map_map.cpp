@@ -121,8 +121,3 @@ Coordinate BaseInnerMapMap::GetVoidBorder(DIRECTION::Direction dir) const
     
     return coord;
 }
-
-int BaseInnerMapMap::GetID() const
-{
-    return map_id_;
-}

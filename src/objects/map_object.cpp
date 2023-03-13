@@ -1,13 +1,13 @@
 #include <objects/map_object.h>
 
 MapObject::MapObject(std::shared_ptr<const ObjectManager> object_manager, 
-                std::shared_ptr<const MapManager> map_manager, 
+                std::shared_ptr<MapManager> map_manager, 
                 std::shared_ptr<const std::map<uint64_t, std::shared_ptr<const BaseObject>>> objects) : BaseObject(OBJECT::MAP, object_manager, map_manager, objects)
 {
-    inner_map_id_ = MAP::STATIC_2;
+    inner_map_id_ = NewMap(MAP::STATIC_2);
 }
 
-std::map<uint64_t, ACTION::Action> MapObject::Move(ACTION::Action act, MAP::MapID map_id) const
+std::map<uint64_t, ACTION::Action> MapObject::Move(ACTION::Action act, uint64_t map_id) const
 {
     std::shared_ptr<const BaseObject> around;
     std::map<uint64_t, ACTION::Action> ret_act;
@@ -73,7 +73,7 @@ std::map<uint64_t, ACTION::Action> MapObject::Move(ACTION::Action act) const
     return Move(act, GetObjectMapID());
 }
 
-MAP::MapID MapObject::GetInnerMapID() const
+uint64_t MapObject::GetInnerMapID() const
 {
     return inner_map_id_;
 }

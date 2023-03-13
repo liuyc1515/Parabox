@@ -3,7 +3,6 @@
 InnerMapMap1::InnerMapMap1() : BaseInnerMapMap(10, 8)
 {
     std::cout << "start init inner map map 1" << std::endl;
-    map_id_ = MAP::STATIC_1;
     SetSpecificObjects();
 }
 

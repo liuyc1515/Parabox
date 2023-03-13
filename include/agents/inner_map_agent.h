@@ -7,7 +7,7 @@ class InnerMapAgent : public BaseAgent
 {
 private:
     virtual void UpdateObjects(const std::map<uint64_t, ACTION::Action> &changes);
-    void InitObjectsInMap(MAP::MapID map_id);
+    void InitObjectsInMap(uint64_t map_id);
 public:
     InnerMapAgent();
     virtual ~InnerMapAgent();

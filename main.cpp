@@ -7,7 +7,6 @@
 int main()
 {
     Canvas::InitColors();
-    MapManager::InitMaps();
     std::unique_ptr<BaseAgent> agent = Parabox::NewAgentByType(AGENT::INNER);
     int x = agent->GetCurrentMapX();
     int y = agent->GetCurrentMapY();

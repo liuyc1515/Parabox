@@ -24,14 +24,14 @@ protected:
     std::shared_ptr<ObjectManager> object_manager_;
     std::shared_ptr<MapManager> map_manager_;
     virtual void UpdateObjects(const std::map<uint64_t, ACTION::Action> &changes);
-    inline std::shared_ptr<BaseObject> NewObjectByType(OBJECT::ObjectType type) const;
+    std::shared_ptr<BaseObject> NewObjectByType(OBJECT::ObjectType type) const;
 public:
     BaseAgent();
     virtual ~BaseAgent();
     std::shared_ptr<const ObjectManager> GetObjectManager() const;
     std::shared_ptr<const MapManager> GetMapManager() const;
-    int GetMapX(MAP::MapID map_id) const;
-    int GetMapY(MAP::MapID map_id) const;
+    int GetMapX(uint64_t map_id) const;
+    int GetMapY(uint64_t map_id) const;
     int GetCurrentMapX() const;
     int GetCurrentMapY() const;
     virtual void OperatorMove(ACTION::Action act);

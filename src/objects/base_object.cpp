@@ -2,7 +2,7 @@
 
 BaseObject::BaseObject(OBJECT::ObjectType type, 
 std::shared_ptr<const ObjectManager> object_manager, 
-std::shared_ptr<const MapManager> map_manager,
+std::shared_ptr<MapManager> map_manager,
 std::shared_ptr<const std::map<uint64_t, std::shared_ptr<const BaseObject>>> objects) : type_(type) 
 {
     object_manager_ = std::move(object_manager);
@@ -25,18 +25,18 @@ std::shared_ptr<const BaseObject> BaseObject::GetObjectByID(uint64_t object_id) 
     return objects_->at(object_id);
 }
 
-MAP::MapID BaseObject::GetObjectMapID() const
+uint64_t BaseObject::GetObjectMapID() const
 {
     return object_manager_->GetObjectMap(GetID());
 }
 
-bool BaseObject::HasVoidBorder(DIRECTION::Direction dir, MAP::MapID map_id) const
+bool BaseObject::HasVoidBorder(DIRECTION::Direction dir, uint64_t map_id) const
 {
     Coordinate coord = map_manager_->GetVoidBorder(dir, map_id);
     return !(coord.first == -1 && coord.second == -1);
 }
 
-Coordinate BaseObject::CalcCoordInMap(const Coordinate &coord, MAP::MapID from_map_id, MAP::MapID to_map_id, DIRECTION::Direction dir) const
+Coordinate BaseObject::CalcCoordInMap(const Coordinate &coord, uint64_t from_map_id, uint64_t to_map_id, DIRECTION::Direction dir) const
 {
     Coordinate new_coord(-1, -1);
 
@@ -59,7 +59,12 @@ Coordinate BaseObject::CalcCoordInMap(const Coordinate &coord, MAP::MapID from_m
     return new_coord;
 }
 
-std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir, MAP::MapID map_id) const
+uint64_t BaseObject::NewMap(MAP::MapType map_type)
+{
+    return map_manager_->NewMap(map_type);
+}
+
+std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir, uint64_t map_id) const
 {
     Coordinate self_coord = CalcCoordInMap(object_manager_->GetObjectCoord(GetID()), object_manager_->GetObjectMap(GetID()), map_id, dir);
     uint64_t around_object_id = object_manager_->GetObjectInMapAtCoord(map_id, CalcCoordByDirection(self_coord, dir));
@@ -118,7 +123,7 @@ uint64_t BaseObject::GetID() const
     return (uint64_t)this;
 }
 
-MAP::MapID BaseObject::GetInnerMapID() const
+uint64_t BaseObject::GetInnerMapID() const
 {
-    return MAP::MAP_COUNT;
+    return 0;
 }

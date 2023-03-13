@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include <utils/map_id.h>
+#include <utils/map_types.h>
 
 typedef std::pair<int, int> Coordinate;
 
@@ -67,5 +67,5 @@ struct ObjectInfo
 {
     Coordinate coordinate_;
     OBJECT::ObjectType type_;
-    MAP::MapID map_id_;
+    uint64_t map_id_;
 };

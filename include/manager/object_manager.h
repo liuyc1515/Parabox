@@ -13,9 +13,9 @@ public:
     ObjectManager();
     ~ObjectManager();
     Coordinate GetObjectCoord(uint64_t object_id) const;
-    MAP::MapID GetObjectMap(uint64_t object_id) const;
-    std::vector<uint64_t> GetObjectInMap(MAP::MapID map_id) const;
-    uint64_t GetObjectInMapAtCoord(MAP::MapID map_id, const Coordinate &coord) const;
+    uint64_t GetObjectMap(uint64_t object_id) const;
+    std::vector<uint64_t> GetObjectInMap(uint64_t map_id) const;
+    uint64_t GetObjectInMapAtCoord(uint64_t map_id, const Coordinate &coord) const;
     OBJECT::ObjectType GetObjectType(uint64_t object_id) const;
     
     void SetWholeMap(std::map<uint64_t, ObjectInfo> &new_map);

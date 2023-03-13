@@ -22,7 +22,13 @@ void InnerMapAgent::UpdateObjects(const std::map<uint64_t, ACTION::Action> &chan
     std::map<uint64_t, ObjectInfo> new_map;
     Coordinate tmp_coord;
     OBJECT::ObjectType tmp_type;
-    MAP::MapID tmp_map_id;
+    uint64_t tmp_map_id;
+    int stuck;
+    for (auto c : changes)
+    {
+        std::cout << "object " << objects_->at(c.first)->GetType() << " action " << c.second << std::endl;
+    }
+    
     
     for (auto obj : *objects_)
     {
@@ -69,9 +75,11 @@ void InnerMapAgent::UpdateObjects(const std::map<uint64_t, ACTION::Action> &chan
     }
 
     object_manager_->SetWholeMap(new_map);
+    std::cout << "new player coord " << object_manager_->GetObjectCoord(operator_->GetID()).first << ", " << object_manager_->GetObjectCoord(operator_->GetID()).second << std::endl;
+    // std::cin >> stuck;
 }
 
-void InnerMapAgent::InitObjectsInMap(MAP::MapID map_id)
+void InnerMapAgent::InitObjectsInMap(uint64_t map_id)
 {
     std::shared_ptr<const BaseObject> tmp_object(NULL);
     for (int i = 0; i < map_manager_->GetMapX(map_id); ++i)
@@ -87,7 +95,7 @@ void InnerMapAgent::InitObjectsInMap(MAP::MapID map_id)
             }
             if (tmp_object->GetType() == OBJECT::PLAYER)
             {
-                operator_ = std::move(tmp_object);
+                std::cerr << "player cannot be init in the map in object" << std::endl;
             }
         }
     }

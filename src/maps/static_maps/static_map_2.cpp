@@ -3,7 +3,6 @@
 StaticMap2::StaticMap2() : BaseStaticMap(6, 5)
 {
     std::cout << "start init static map 2" << std::endl;
-    map_id_ = MAP::STATIC_2;
     SetSpecificObjects();
 }
 

@@ -26,7 +26,7 @@ BaseAgent::~BaseAgent()
     
 }
 
-inline std::shared_ptr<BaseObject> BaseAgent::NewObjectByType(OBJECT::ObjectType type) const
+std::shared_ptr<BaseObject> BaseAgent::NewObjectByType(OBJECT::ObjectType type) const
 {
     std::shared_ptr<BaseObject> tmp_object(NULL);
     switch (type)
@@ -107,12 +107,12 @@ void BaseAgent::OperatorMove(ACTION::Action act)
     UpdateObjects(changes);
 }
 
-int BaseAgent::GetMapX(MAP::MapID map_id) const
+int BaseAgent::GetMapX(uint64_t map_id) const
 {
     return map_manager_->GetMapX(map_id);
 }
 
-int BaseAgent::GetMapY(MAP::MapID map_id) const
+int BaseAgent::GetMapY(uint64_t map_id) const
 {
     return map_manager_->GetMapY(map_id);
 }

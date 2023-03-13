@@ -62,6 +62,7 @@ void Parabox::Start()
             agent_->OperatorMove((ACTION::Action)(ACTION::UP + (act - KEYBOARD::UP)));
             UpdateCanvas();
             canvas_.CanvasPrint();
+            std::cout << "finished one action" << std::endl;
             break;
         default:
             break;

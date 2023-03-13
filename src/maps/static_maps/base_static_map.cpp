@@ -125,8 +125,3 @@ Coordinate BaseStaticMap::GetVoidBorder(DIRECTION::Direction dir) const
     
     return coord;
 }
-
-int BaseStaticMap::GetID() const
-{
-    return map_id_;
-}

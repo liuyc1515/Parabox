@@ -1,9 +1,8 @@
 #include <maps/static_maps/static_map_1.h>
 
-StaticMap1::StaticMap1() : BaseStaticMap(10, 8)
+StaticMap1::StaticMap1() : BaseStaticMap(8, 8)
 {
     std::cout << "start init static map 1" << std::endl;
-    map_id_ = MAP::STATIC_1;
     SetSpecificObjects();
 }
 

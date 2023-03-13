@@ -19,16 +19,16 @@ Coordinate ObjectManager::GetObjectCoord(uint64_t object_id) const
     return object_coord_map_.at(object_id).coordinate_;
 }
 
-MAP::MapID ObjectManager::GetObjectMap(uint64_t object_id) const
+uint64_t ObjectManager::GetObjectMap(uint64_t object_id) const
 {
     if (object_coord_map_.find(object_id) == object_coord_map_.end())
     {
-        return MAP::MAP_COUNT;
+        return 0;
     }
     return object_coord_map_.at(object_id).map_id_;
 }
 
-std::vector<uint64_t> ObjectManager::GetObjectInMap(MAP::MapID map_id) const
+std::vector<uint64_t> ObjectManager::GetObjectInMap(uint64_t map_id) const
 {
     std::vector<uint64_t> objects;
     for (auto obj : object_coord_map_)
@@ -41,7 +41,7 @@ std::vector<uint64_t> ObjectManager::GetObjectInMap(MAP::MapID map_id) const
     return std::move(objects);
 }
 
-uint64_t ObjectManager::GetObjectInMapAtCoord(MAP::MapID map_id, const Coordinate &coord) const
+uint64_t ObjectManager::GetObjectInMapAtCoord(uint64_t map_id, const Coordinate &coord) const
 {
     for (auto obj : object_coord_map_)
     {

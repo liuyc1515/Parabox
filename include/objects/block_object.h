@@ -9,8 +9,8 @@ class BlockObject : public BaseObject
 private:
 public:
     BlockObject(std::shared_ptr<const ObjectManager> object_manager, 
-                std::shared_ptr<const MapManager> map_manager, 
+                std::shared_ptr<MapManager> map_manager, 
                 std::shared_ptr<const std::map<uint64_t, std::shared_ptr<const BaseObject>>> objects);
     virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act) const;
-    virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act, MAP::MapID map_id) const;
+    virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act, uint64_t map_id) const;
 };
