@@ -12,6 +12,7 @@ ObjectManager::~ObjectManager()
 
 Coordinate ObjectManager::GetObjectCoord(uint64_t object_id) const
 {
+    // std::cout << "object manager get object " << object_id << std::endl;
     if (object_coord_map_.find(object_id) == object_coord_map_.end())
     {
         return Coordinate(-1, -1);

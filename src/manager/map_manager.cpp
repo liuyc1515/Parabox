@@ -7,6 +7,7 @@ MapManager::MapManager()
 
 Coordinate MapManager::CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const
 {
+    std::cout << "from " << coord.first << ", " << coord.second << " and act " << act << std::endl;
     if (maps_.find(current_map_id_) == maps_.end())
     {
         return Coordinate(-1, -1);

@@ -24,6 +24,7 @@ void InnerMapAgent::UpdateObjects(const std::map<uint64_t, ACTION::Action> &chan
     OBJECT::ObjectType tmp_type;
     uint64_t tmp_map_id;
     int stuck;
+    
     for (auto c : changes)
     {
         std::cout << "object " << objects_->at(c.first)->GetType() << " action " << c.second << std::endl;
@@ -45,6 +46,17 @@ void InnerMapAgent::UpdateObjects(const std::map<uint64_t, ACTION::Action> &chan
                         tmp_map_id = objects_->at(object_manager_->GetObjectInMapAtCoord(map_manager_->GetCurrentMapID(), tmp_coord))->GetInnerMapID();
                         tmp_type = obj.second->GetType();
                         tmp_coord = map_manager_->GetVoidBorder(OppositeDirection(ActionToDirection((ACTION::Action)(changes.at(obj.second->GetID()) - (ACTION::UP_INTO - ACTION::UP)))), tmp_map_id);
+                        if (obj.second->GetType() == OBJECT::PLAYER)
+                        {
+                            map_manager_->SetCurrentMapID(tmp_map_id);
+                        }
+                    }
+                    else if (changes.at(obj.second->GetID()) <= ACTION::RIGHT_OUT && changes.at(obj.second->GetID()) >= ACTION::UP_OUT)
+                    {
+                        tmp_map_id = object_manager_->GetObjectMap(objects_->at(GetObjectByInnerMapID(object_manager_->GetObjectMap(obj.second->GetID())))->GetID());
+                        tmp_coord = map_manager_->CalcCoordByAction(object_manager_->GetObjectCoord(objects_->at(GetObjectByInnerMapID(object_manager_->GetObjectMap(obj.second->GetID())))->GetID()), 
+                                                                        (ACTION::Action)(changes.at(obj.second->GetID()) - (ACTION::UP_OUT - ACTION::UP)));
+                        tmp_type = obj.second->GetType();
                         if (obj.second->GetType() == OBJECT::PLAYER)
                         {
                             map_manager_->SetCurrentMapID(tmp_map_id);
@@ -76,7 +88,6 @@ void InnerMapAgent::UpdateObjects(const std::map<uint64_t, ACTION::Action> &chan
 
     object_manager_->SetWholeMap(new_map);
     std::cout << "new player coord " << object_manager_->GetObjectCoord(operator_->GetID()).first << ", " << object_manager_->GetObjectCoord(operator_->GetID()).second << std::endl;
-    // std::cin >> stuck;
 }
 
 void InnerMapAgent::InitObjectsInMap(uint64_t map_id)
@@ -99,4 +110,17 @@ void InnerMapAgent::InitObjectsInMap(uint64_t map_id)
             }
         }
     }
+}
+
+uint64_t InnerMapAgent::GetObjectByInnerMapID(uint64_t inner_map_id) const
+{
+    uint64_t object_id = 0;
+    for (auto obj : *objects_)
+    {
+        if (obj.second->GetInnerMapID() == inner_map_id)
+        {
+            object_id = obj.first;
+        }
+    }
+    return object_id;
 }

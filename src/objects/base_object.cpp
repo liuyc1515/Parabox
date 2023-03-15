@@ -36,9 +36,31 @@ bool BaseObject::HasVoidBorder(DIRECTION::Direction dir, uint64_t map_id) const
     return !(coord.first == -1 && coord.second == -1);
 }
 
-Coordinate BaseObject::CalcCoordInMap(const Coordinate &coord, uint64_t from_map_id, uint64_t to_map_id, DIRECTION::Direction dir) const
+bool BaseObject::CompareReturnAndExpectedAct(ACTION::Action ret_act, ACTION::Action exp_act) const
+{
+    return ret_act == exp_act
+    || ret_act == exp_act + (ACTION::LEFT_OUT - ACTION::LEFT)
+    || ret_act == exp_act + (ACTION::LEFT_INTO - ACTION::LEFT) 
+    || ret_act == ACTION::DISAPPEAR;
+}
+
+uint64_t BaseObject::GetObjectByInnerMapID(uint64_t inner_map_id) const
+{
+    uint64_t object_id = 0;
+    for (auto obj : *objects_)
+    {
+        if (obj.second->GetInnerMapID() == inner_map_id)
+        {
+            object_id = obj.first;
+        }
+    }
+    return object_id;
+}
+
+Coordinate BaseObject::CalcCoordInAnotherMap(const Coordinate &coord, uint64_t from_map_id, uint64_t &to_map_id, DIRECTION::Direction dir) const
 {
     Coordinate new_coord(-1, -1);
+    uint64_t inner_map_object_id;
 
     if (from_map_id == to_map_id)
     {
@@ -48,7 +70,16 @@ Coordinate BaseObject::CalcCoordInMap(const Coordinate &coord, uint64_t from_map
     {
         if (map_manager_->IsBorder(from_map_id, coord))
         {
-            
+            inner_map_object_id = GetObjectByInnerMapID(from_map_id);
+            if (inner_map_object_id == 0)
+            {
+                std::cerr << "Error map id" << std::endl;
+            }
+            else
+            {
+                new_coord = object_manager_->GetObjectCoord(inner_map_object_id);
+                to_map_id = object_manager_->GetObjectMap(inner_map_object_id);
+            }
         }
         else
         {
@@ -66,7 +97,7 @@ uint64_t BaseObject::NewMap(MAP::MapType map_type)
 
 std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir, uint64_t map_id) const
 {
-    Coordinate self_coord = CalcCoordInMap(object_manager_->GetObjectCoord(GetID()), object_manager_->GetObjectMap(GetID()), map_id, dir);
+    Coordinate self_coord = CalcCoordInAnotherMap(object_manager_->GetObjectCoord(GetID()), object_manager_->GetObjectMap(GetID()), map_id, dir);
     uint64_t around_object_id = object_manager_->GetObjectInMapAtCoord(map_id, CalcCoordByDirection(self_coord, dir));
     if (around_object_id == 0)
     {

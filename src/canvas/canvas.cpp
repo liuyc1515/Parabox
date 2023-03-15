@@ -41,6 +41,7 @@ Canvas::~Canvas()
 
 void Canvas::InitCanvas(int x, int y)
 {
+    std::cout << "start init canvas with x " << x << ", y " << y << std::endl;
     if (x_ == x && y_ == y)
     {
         return;
@@ -52,6 +53,9 @@ void Canvas::InitCanvas(int x, int y)
         y_ = 0;
     }
 
+    SetCanvasX(x);
+    SetCanvasY(y);
+
     canvas_ = std::move(std::make_unique<std::unique_ptr<CanvasElement[]>[]>(x_));
     for (int i = 0; i < x_; ++i)
     {
@@ -61,9 +65,6 @@ void Canvas::InitCanvas(int x, int y)
             canvas_[i][j] = BLANK;
         }
     }
-
-    SetCanvasX(x);
-    SetCanvasY(y);
 }
 
 void Canvas::SetCanvasX(int x)
@@ -96,6 +97,7 @@ void Canvas::CanvasSet(const Coordinate &coord, OBJECT::ObjectType element)
     }
 
     canvas_[coord.first][coord.second] = elements[element];
+    // std::cout << "finished set canvas" << std::endl;
 }
 
 void Canvas::CanvasReset(const Coordinate &coord)
@@ -114,6 +116,7 @@ inline void Canvas::ScreenClear() const
 
 void Canvas::CanvasPrint() const
 {
+    std::cout << "start print canvas" << std::endl;
     ScreenClear();
     for (int i = 0; i < x_; ++i)
     {

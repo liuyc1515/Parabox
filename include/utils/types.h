@@ -21,6 +21,10 @@ namespace ACTION
         DOWN_INTO,
         LEFT_INTO,
         RIGHT_INTO,
+        UP_OUT,
+        DOWN_OUT,
+        LEFT_OUT,
+        RIGHT_OUT,
         NOP
     };
 }

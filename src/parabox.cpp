@@ -15,13 +15,18 @@ canvas_(x, y)
 
 void Parabox::UpdateCanvas()
 {
+    std::cout << "start update canvas" << std::endl;
     std::vector<uint64_t> object_ids = std::move(object_manager_->GetObjectInMap(map_manager_->GetCurrentMapID()));
 
     canvas_.InitCanvas(agent_->GetCurrentMapX(), agent_->GetCurrentMapY());
 
+    std::cout << "start set canvas with object num " << object_ids.size() << std::endl;
+
     for (auto object_id : object_ids)
     {
-        canvas_.CanvasSet(object_manager_->GetObjectCoord(object_id), object_manager_->GetObjectType(object_id));
+        Coordinate tmp_coord = object_manager_->GetObjectCoord(object_id);
+        // std::cout << "set obj coord (" << tmp_coord.first << ", " << tmp_coord.second << ") with type " << object_manager_->GetObjectType(object_id) << std::endl;
+        canvas_.CanvasSet(tmp_coord, object_manager_->GetObjectType(object_id));
     }
 }
 

@@ -69,8 +69,7 @@ Coordinate BaseStaticMap::CalcCoordByAction(const Coordinate &coord, ACTION::Act
     }
     if (IsOutOfBorder(new_coord))
     {
-        new_coord.first = coord.first;
-        new_coord.second = coord.second;
+        std::cout << "out of border" << std::endl;
     }
     return new_coord;
 }

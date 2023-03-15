@@ -15,13 +15,22 @@ std::map<uint64_t, ACTION::Action> PlayerObject::Move(ACTION::Action act, uint64
     around = GetAround(ActionToDirection(act), map_id);
     if (around == NULL)
     {
-        std::cerr << "Failed to move player : Incomplete map" << std::endl;
-        ret_act.insert({GetID(), ACTION::NOP});
+        recursive_act = Move(act, 0);
+        ret_act.insert(recursive_act.begin(), recursive_act.end());
+        if (ret_act.at(GetID()) == act)
+        {
+            ret_act.at(GetID()) = (ACTION::Action)(act + (ACTION::UP_OUT - ACTION::UP));
+        }
+        else
+        {
+            std::cerr << "Failed to move player : Incomplete map" << std::endl;
+            ret_act.at(GetID()) = ACTION::NOP;
+        }
     }
     else
     {
         ret_act = around->Move(act);
-        if (ret_act.at(around->GetID()) == act || ret_act.at(around->GetID()) == act + (ACTION::LEFT_INTO - ACTION::LEFT) || ret_act.at(around->GetID()) == ACTION::DISAPPEAR)
+        if (CompareReturnAndExpectedAct(ret_act.at(around->GetID()), act))
         {
             ret_act.insert({GetID(), act});
         }
