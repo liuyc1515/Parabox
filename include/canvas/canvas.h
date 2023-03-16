@@ -29,8 +29,9 @@ const CanvasElement WALL = {'W', WHITE};
 const CanvasElement OPERATOR = {'P', YELLOW};
 const CanvasElement BLOCK = {'B', GREEN};
 const CanvasElement INNER = {'M', PURPLE};
+const CanvasElement RECURSION = {'R', DARKGREEN};
 
-const CanvasElement elements[OBJECT::OBJ_COUNT] = {BLANK, WALL, OPERATOR, BLOCK, INNER};
+const CanvasElement elements[OBJECT::OBJ_COUNT] = {BLANK, WALL, OPERATOR, BLOCK, INNER, RECURSION};
 
 class Canvas
 {

@@ -46,6 +46,9 @@ std::shared_ptr<BaseObject> BaseAgent::NewObjectByType(OBJECT::ObjectType type) 
     case OBJECT::MAP:
         tmp_object = std::make_shared<MapObject>(object_manager_, map_manager_, objects_);
         break;
+    case OBJECT::RECURSION:
+        tmp_object = std::make_shared<RecursionObject>(object_manager_, map_manager_, objects_);
+        break;
     default:
         break;
     }

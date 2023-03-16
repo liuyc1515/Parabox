@@ -7,6 +7,7 @@ namespace MAP
         STATIC_1 = 0,
         STATIC_2,
         INNER_1,
+        RECURSIVE_1,
 
         MAP_COUNT
     };

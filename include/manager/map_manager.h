@@ -6,6 +6,7 @@
 
 #include <maps/static_maps/all_static_maps.h>
 #include <maps/inner_map_maps/all_inner_map_maps.h>
+#include <maps/recursion_maps/all_recursion_maps.h>
 
 class MapManager
 {

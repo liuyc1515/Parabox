@@ -1,8 +1,11 @@
 #pragma once
 
-class RecursionAgent
+#include <agents/inner_map_agent.h>
+
+class RecursionAgent : public InnerMapAgent
 {
 public:
     RecursionAgent();
+    virtual ~RecursionAgent();
 };
 

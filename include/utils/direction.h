@@ -47,15 +47,23 @@ inline DIRECTION::Direction ActionToDirection(ACTION::Action act)
     switch (act)
     {
     case ACTION::UP:
+    case ACTION::UP_INTO:
+    case ACTION::UP_OUT:
         ret_dir = DIRECTION::UP;
         break;
     case ACTION::DOWN:
+    case ACTION::DOWN_INTO:
+    case ACTION::DOWN_OUT:
         ret_dir = DIRECTION::DOWN;
         break;
     case ACTION::LEFT:
+    case ACTION::LEFT_INTO:
+    case ACTION::LEFT_OUT:
         ret_dir = DIRECTION::LEFT;
         break;
     case ACTION::RIGHT:
+    case ACTION::RIGHT_INTO:
+    case ACTION::RIGHT_OUT:
         ret_dir = DIRECTION::RIGHT;
         break;
     default:

@@ -33,19 +33,22 @@ void Parabox::UpdateCanvas()
 std::unique_ptr<BaseAgent> Parabox::NewAgentByType(AGENT::AgentType agent_type)
 {
     std::cout << "start create agent" << std::endl;
-    std::unique_ptr<BaseAgent> tmp_object;
+    std::unique_ptr<BaseAgent> tmp_agent;
     switch (agent_type)
     {
     case AGENT::BASE:
-        tmp_object = std::move(std::make_unique<BaseAgent>());
+        tmp_agent = std::move(std::make_unique<BaseAgent>());
         break;
     case AGENT::INNER:
-        tmp_object = std::move(std::make_unique<InnerMapAgent>());
+        tmp_agent = std::move(std::make_unique<InnerMapAgent>());
+        break;
+    case AGENT::RECURSION:
+        tmp_agent = std::move(std::make_unique<RecursionAgent>());
         break;
     default:
         break;
     }
-    return std::move(tmp_object);
+    return std::move(tmp_agent);
 }
 
 void Parabox::Start()

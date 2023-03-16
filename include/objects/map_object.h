@@ -1,7 +1,6 @@
 #pragma once
 
 #include <objects/base_object.h>
-#include <maps/static_maps/all_static_maps.h>
 
 class MapObject : public BaseObject
 {
@@ -15,4 +14,5 @@ public:
     virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act) const;
     virtual std::map<uint64_t, ACTION::Action> Move(ACTION::Action act, uint64_t map_id) const;
     virtual uint64_t GetInnerMapID() const;
+    virtual void SetInnerMapID(uint64_t map_id);
 };

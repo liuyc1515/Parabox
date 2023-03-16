@@ -51,6 +51,7 @@ namespace OBJECT
         PLAYER,
         BLOCK,
         MAP,
+        RECURSION,
 
         OBJ_COUNT
     };
@@ -62,6 +63,7 @@ namespace AGENT
     {
         BASE = 0,
         INNER,
+        RECURSION,
 
         AGENT_COUNT
     };

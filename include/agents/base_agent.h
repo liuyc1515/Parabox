@@ -10,6 +10,7 @@
 #include <objects/wall_object.h>
 #include <objects/void_object.h>
 #include <objects/map_object.h>
+#include <objects/recursion_object.h>
 #include <manager/object_manager.h>
 #include <manager/map_manager.h>
 #include <utils/types.h>
@@ -24,7 +25,7 @@ protected:
     std::shared_ptr<ObjectManager> object_manager_;
     std::shared_ptr<MapManager> map_manager_;
     virtual void UpdateObjects(const std::map<uint64_t, ACTION::Action> &changes);
-    std::shared_ptr<BaseObject> NewObjectByType(OBJECT::ObjectType type) const;
+    virtual std::shared_ptr<BaseObject> NewObjectByType(OBJECT::ObjectType type) const;
 public:
     BaseAgent();
     virtual ~BaseAgent();

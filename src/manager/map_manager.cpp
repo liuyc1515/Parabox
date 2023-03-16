@@ -2,7 +2,7 @@
 
 MapManager::MapManager()
 {
-    current_map_id_ = NewMap(MAP::INNER_1);
+    current_map_id_ = NewMap(MAP::RECURSIVE_1);
 }
 
 Coordinate MapManager::CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const
@@ -54,6 +54,10 @@ uint64_t MapManager::NewMap(MAP::MapType map_type)
         break;
     case MAP::INNER_1:
         tmp_map = std::make_shared<const InnerMapMap1>();
+        tmp_map_id = tmp_map->GetID();
+        break;
+    case MAP::RECURSIVE_1:
+        tmp_map = std::make_shared<const RecursionMap1>();
         tmp_map_id = tmp_map->GetID();
         break;
     default:

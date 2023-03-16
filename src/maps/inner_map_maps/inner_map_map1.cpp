@@ -14,4 +14,5 @@ void InnerMapMap1::SetSpecificObjects()
     SetObject({2, 2}, OBJECT::BLOCK);
     SetObject({3, 2}, OBJECT::BLOCK);
     SetObject({3, 3}, OBJECT::MAP);
+    SetObject({3, 4}, OBJECT::MAP);
 }

@@ -57,34 +57,34 @@ uint64_t BaseObject::GetObjectByInnerMapID(uint64_t inner_map_id) const
     return object_id;
 }
 
-Coordinate BaseObject::CalcCoordInAnotherMap(const Coordinate &coord, uint64_t from_map_id, uint64_t &to_map_id, DIRECTION::Direction dir) const
+Coordinate BaseObject::CalcCoordInAnotherMap(const Coordinate &coord, uint64_t from_map_id, uint64_t &to_map_id, ACTION::Action act) const
 {
     Coordinate new_coord(-1, -1);
     uint64_t inner_map_object_id;
+    DIRECTION::Direction dir = ActionToDirection(act);
 
-    if (from_map_id == to_map_id)
+    if (act >= ACTION::UP_INTO && act <= ACTION::RIGHT_INTO)
     {
-        new_coord = coord;
+        std::cout << "getting coord in inner map" << std::endl;
+        new_coord = CalcCoordByDirection(map_manager_->GetVoidBorder(OppositeDirection(dir), to_map_id), OppositeDirection(dir));
     }
-    else
+    else if (act >= ACTION::UP_OUT && act <= ACTION::RIGHT_OUT)
     {
-        if (map_manager_->IsBorder(from_map_id, coord))
+        std::cout << "getting coord in outer map" << std::endl;
+        inner_map_object_id = GetObjectByInnerMapID(from_map_id);
+        if (inner_map_object_id == 0)
         {
-            inner_map_object_id = GetObjectByInnerMapID(from_map_id);
-            if (inner_map_object_id == 0)
-            {
-                std::cerr << "Error map id" << std::endl;
-            }
-            else
-            {
-                new_coord = object_manager_->GetObjectCoord(inner_map_object_id);
-                to_map_id = object_manager_->GetObjectMap(inner_map_object_id);
-            }
+            std::cerr << "Error map id" << std::endl;
         }
         else
         {
-            new_coord = CalcCoordByDirection(map_manager_->GetVoidBorder(OppositeDirection(dir), to_map_id), OppositeDirection(dir));
+            new_coord = object_manager_->GetObjectCoord(inner_map_object_id);
+            to_map_id = object_manager_->GetObjectMap(inner_map_object_id);
         }
+    }
+    else
+    {
+        std::cerr << "Error action in calc coord in another map" << std::endl;
     }
 
     return new_coord;
@@ -95,9 +95,20 @@ uint64_t BaseObject::NewMap(MAP::MapType map_type)
     return map_manager_->NewMap(map_type);
 }
 
-std::shared_ptr<const BaseObject> BaseObject::GetAround(DIRECTION::Direction dir, uint64_t map_id) const
+std::shared_ptr<const BaseObject> BaseObject::GetAround(ACTION::Action act, uint64_t map_id) const
 {
-    Coordinate self_coord = CalcCoordInAnotherMap(object_manager_->GetObjectCoord(GetID()), object_manager_->GetObjectMap(GetID()), map_id, dir);
+    
+    Coordinate self_coord(-1, -1);
+    std::cout << "getting around with act " << act << std::endl;
+    if (act >= ACTION::UP && act <= ACTION::RIGHT)
+    {
+        self_coord = object_manager_->GetObjectCoord(GetID());
+    }
+    else
+    {
+        self_coord = CalcCoordInAnotherMap(object_manager_->GetObjectCoord(GetID()), object_manager_->GetObjectMap(GetID()), map_id, act);
+    }
+    DIRECTION::Direction dir = ActionToDirection(act);
     uint64_t around_object_id = object_manager_->GetObjectInMapAtCoord(map_id, CalcCoordByDirection(self_coord, dir));
     if (around_object_id == 0)
     {
@@ -157,4 +168,9 @@ uint64_t BaseObject::GetID() const
 uint64_t BaseObject::GetInnerMapID() const
 {
     return 0;
+}
+
+void BaseObject::SetInnerMapID(uint64_t map_id)
+{
+    return;
 }

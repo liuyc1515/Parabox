@@ -12,10 +12,11 @@ std::map<uint64_t, ACTION::Action> PlayerObject::Move(ACTION::Action act, uint64
     std::shared_ptr<const BaseObject> around;
     std::map<uint64_t, ACTION::Action> ret_act;
     std::map<uint64_t, ACTION::Action> recursive_act;
-    around = GetAround(ActionToDirection(act), map_id);
+    around = GetAround(act, map_id);
+    act = DirectionToAction(ActionToDirection(act));
     if (around == NULL)
     {
-        recursive_act = Move(act, 0);
+        recursive_act = Move((ACTION::Action)(act + (ACTION::UP_OUT - ACTION::UP)), 0);
         ret_act.insert(recursive_act.begin(), recursive_act.end());
         if (ret_act.at(GetID()) == act)
         {
@@ -36,9 +37,9 @@ std::map<uint64_t, ACTION::Action> PlayerObject::Move(ACTION::Action act, uint64
         }
         else if (ret_act.at(around->GetID()) == ACTION::INTO_ALLOWED)
         {
-            if (around->GetType() == OBJECT::MAP)
+            if (around->GetType() == OBJECT::MAP || around->GetType() == OBJECT::RECURSION)
             {
-                recursive_act = Move(act, around->GetInnerMapID());
+                recursive_act = Move((ACTION::Action)(act + (ACTION::UP_INTO - ACTION::UP)), around->GetInnerMapID());
                 ret_act.insert(recursive_act.begin(), recursive_act.end());
                 if (ret_act.at(GetID()) == act)
                 {

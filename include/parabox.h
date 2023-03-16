@@ -6,6 +6,7 @@
 #include <keyboard/keyboard_control.h>
 #include <agents/base_agent.h>
 #include <agents/inner_map_agent.h>
+#include <agents/recursion_agent.h>
 #include <canvas/canvas.h>
 #include <manager/object_manager.h>
 #include <manager/map_manager.h>
