@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <canvas/color_print.h>
 #include <utils/types.h>
 

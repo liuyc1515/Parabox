@@ -1,6 +1,8 @@
 #pragma once
 
 #include <map>
+#include <cstdint>
+
 #include <utils/map_types.h>
 
 typedef std::pair<int, int> Coordinate;
