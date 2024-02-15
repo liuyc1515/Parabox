@@ -72,8 +72,11 @@ void Parabox::Start()
             canvas_.CanvasPrint();
             std::cout << "finished one action" << std::endl;
             break;
+	case KEYBOARD::NOP:
+	    break;
         default:
-            break;
+	    std::cout << "Using W/A/S/D to control player" << std::endl;
+	    break;
         }
     }
 

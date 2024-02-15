@@ -15,6 +15,7 @@ void KeyboardControl::ActionCapture()
     {
         key = GetChar();
         queue_mtx_.lock();
+	std::cout << "Key Number is " << key << std::endl;
         switch (key)
         {
         case KEY_W:
@@ -33,6 +34,8 @@ void KeyboardControl::ActionCapture()
             buffer_ = std::queue<KEYBOARD::Action>();
             buffer_.push(KEYBOARD::ESC);
             return;
+	default:
+	    break;
         }
         queue_mtx_.unlock();
     }
