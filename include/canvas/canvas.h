@@ -14,6 +14,7 @@ enum ElementColor {
 	DARKGREEN,
 	BLACK,
 	WHITE,
+	UNDERLINE,
 
 	COLOR_COUNT
 };
@@ -30,8 +31,9 @@ const CanvasElement OPERATOR = {'P', YELLOW};
 const CanvasElement BLOCK = {'B', GREEN};
 const CanvasElement INNER = {'M', PURPLE};
 const CanvasElement RECURSION = {'R', DARKGREEN};
+const CanvasElement TARGET = {' ', UNDERLINE};
 
-const CanvasElement elements[OBJECT::OBJ_COUNT] = {BLANK, WALL, OPERATOR, BLOCK, INNER, RECURSION};
+const CanvasElement elements[OBJECT::OBJ_COUNT] = {BLANK, WALL, OPERATOR, BLOCK, INNER, RECURSION, TARGET};
 
 class Canvas {
 	private:

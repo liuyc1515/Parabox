@@ -49,6 +49,7 @@ enum ObjectType {
 	BLOCK,
 	MAP,
 	RECURSION,
+	UNDERLINE,
 
 	OBJ_COUNT
 };

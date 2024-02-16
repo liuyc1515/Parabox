@@ -1,4 +1,5 @@
 #include <canvas/canvas.h>
+#include "canvas/color_print.h"
 
 void (*Canvas::ColorPrint_[COLOR_COUNT])(char);
 
@@ -71,6 +72,7 @@ void Canvas::InitColors() {
 	ColorPrint_[DARKGREEN] = DarkGreenPrint;
 	ColorPrint_[BLACK] = BlackPrint;
 	ColorPrint_[WHITE] = WhitePrint;
+	ColorPrint_[UNDERLINE] = UnderlinePrint;
 }
 
 void Canvas::CanvasSet(const Coordinate &coord, OBJECT::ObjectType element) {

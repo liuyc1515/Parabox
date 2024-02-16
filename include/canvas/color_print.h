@@ -36,3 +36,7 @@ inline void BlackPrint(char ch) {
 inline void WhitePrint(char ch) {
 	printf("\033[;37m %c \033[0m", ch);
 }
+
+inline void UnderlinePrint(char ch) {
+	printf("\033[4;37m %c \033[0m", ch);
+}
