@@ -33,7 +33,7 @@ struct CanvasElement {
 		void operator=(const CanvasElement &element);
 };
 
-const CanvasElement BLANK = {' ', BLACK, NOEFFECT};
+const CanvasElement BLANK = {' ', WHITE, NOEFFECT};
 const CanvasElement WALL = {'W', WHITE, NOEFFECT};
 const CanvasElement OPERATOR = {'P', YELLOW, NOEFFECT};
 const CanvasElement BLOCK = {'B', GREEN, NOEFFECT};
