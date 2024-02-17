@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 class BaseMap {
 	protected:
@@ -23,6 +24,7 @@ class BaseMap {
 		virtual Coordinate CalcCoordByAction(const Coordinate &coord, ACTION::Action act) const = 0;
 		bool IsBorder(const Coordinate &coord) const;
 		bool IsOutOfBorder(const Coordinate &coord) const;
+		bool IsTarget(const Coordinate &coord) const;
 		uint64_t GetID() const;
 		int GetMapX() const;
 		int GetMapY() const;

@@ -30,6 +30,10 @@ bool BaseMap::IsOutOfBorder(const Coordinate &coord) const {
 	return coord.first < 0 || coord.second < 0 || coord.first > x_ - 1 || coord.second > y_ - 1;
 }
 
+bool BaseMap::IsTarget(const Coordinate &coord) const {
+	return std::find(targets_.begin(), targets_.end(), coord) != targets_.end();
+}
+
 uint64_t BaseMap::GetID() const {
 	return (uint64_t)this;
 }
