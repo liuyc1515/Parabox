@@ -18,6 +18,13 @@ enum ElementColor {
 	COLOR_COUNT
 };
 
+enum ElementEffect {
+	NOEFFECT = 0,
+	UNDERLINE0,
+
+	EFFECT_COUNT
+};
+
 struct CanvasElement {
 		char ch_;
 		ElementColor color_;
