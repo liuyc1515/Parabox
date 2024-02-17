@@ -1,4 +1,8 @@
 #include <canvas/canvas.h>
+
+#include <iostream>
+#include <string>
+
 #include "canvas/color_print.h"
 
 void (*Canvas::ColorPrint_[COLOR_COUNT])(char);
@@ -97,11 +101,17 @@ inline void Canvas::ScreenClear() const {
 }
 
 void Canvas::CanvasPrint() const {
+	std::string escape_begin = "\33[";
+	std::string escape_end = "m";
+	std::string color_reset = escape_begin + "0" + escape_end;
+
 	std::cout << "start print canvas" << std::endl;
 	ScreenClear();
 	for (int i = 0; i < x_; ++i) {
 		for (int j = 0; j < y_; ++j) {
-			(*(ColorPrint_[canvas_[i][j].color_]))(canvas_[i][j].ch_);
+			std::string color_set = escape_begin + std::to_string(printed_effects.at(canvas_[i][j].effect_)) + ";" +
+				std::to_string(printed_colors.at(canvas_[i][j].color_)) + escape_end;
+			std::cout << " " << color_set << canvas_[i][j].ch_ << color_reset << " ";
 		}
 		std::cout << std::endl;
 	}

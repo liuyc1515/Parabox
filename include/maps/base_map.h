@@ -3,9 +3,9 @@
 #include <utils/direction.h>
 #include <utils/types.h>
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 class BaseMap {
 	protected:
