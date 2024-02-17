@@ -29,8 +29,8 @@ void Parabox::UpdateCanvas() {
 
 OBJECT::ObjectStatus Parabox::CalcObjectStatus(uint64_t object_id) const {
 	return map_manager_->IsTarget(map_manager_->GetCurrentMapID(), object_manager_->GetObjectCoord(object_id))
-		? OBJECT::NORMAL
-		: OBJECT::TARGET;
+		? OBJECT::TARGET
+		: OBJECT::NORMAL;
 }
 
 std::unique_ptr<BaseAgent> Parabox::NewAgentByType(AGENT::AgentType agent_type) {
