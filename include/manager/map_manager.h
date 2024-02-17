@@ -25,6 +25,7 @@ class MapManager {
 		int GetMapY(uint64_t map_id) const;
 		bool IsBorder(uint64_t map_id, const Coordinate &coord) const;
 		bool IsOutOfBorder(uint64_t map_id, const Coordinate &coord) const;
+		bool IsTarget(uint64_t map_id, const Coordinate &coord) const;
 
 		uint64_t NewMap(MAP::MapType map_type);
 		void SetCurrentMapID(uint64_t map_id);

@@ -91,3 +91,11 @@ bool MapManager::IsOutOfBorder(uint64_t map_id, const Coordinate &coord) const {
 	}
 	return maps_.at(map_id)->IsOutOfBorder(coord);
 }
+
+bool MapManager::IsTarget(uint64_t map_id, const Coordinate &coord) const {
+	if (maps_.find(map_id) == maps_.end()) {
+		std::cerr << "Cannot find requested map" << std::endl;
+		return true;
+	}
+	return maps_.at(map_id)->IsTarget(coord);
+}
