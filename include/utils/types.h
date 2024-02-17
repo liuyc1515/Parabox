@@ -58,7 +58,7 @@ enum ObjectStatus {
 	TARGET,
 
 	STATUS_COUNT
-}
+};
 }  // namespace OBJECT
 
 namespace AGENT {

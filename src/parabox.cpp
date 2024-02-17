@@ -23,7 +23,7 @@ void Parabox::UpdateCanvas() {
 		// std::cout << "set obj coord (" << tmp_coord.first << ", " <<
 		// tmp_coord.second << ") with type " <<
 		// object_manager_->GetObjectType(object_id) << std::endl;
-		canvas_.CanvasSet(tmp_coord, object_manager_->GetObjectType(object_id));
+		canvas_.CanvasSet(tmp_coord, object_manager_->GetObjectType(object_id), OBJECT::NORMAL);
 	}
 }
 

@@ -66,7 +66,7 @@ class Canvas {
 		~Canvas();
 		static void InitColors();
 		void InitCanvas(int x, int y);
-		void CanvasSet(const Coordinate &coord, OBJECT::ObjectType element);
+		void CanvasSet(const Coordinate &coord, OBJECT::ObjectType type, OBJECT::ObjectStatus status);
 		void CanvasReset(const Coordinate &coord);
 		inline void ScreenClear() const;
 		void CanvasPrint() const;

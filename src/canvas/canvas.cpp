@@ -79,17 +79,18 @@ void Canvas::InitColors() {
 	ColorPrint_[WHITE] = WhitePrint;
 }
 
-void Canvas::CanvasSet(const Coordinate &coord, OBJECT::ObjectType element) {
+void Canvas::CanvasSet(const Coordinate &coord, OBJECT::ObjectType type, OBJECT::ObjectStatus status) {
 	if (coord.first >= x_ || coord.second >= y_ || coord.first < 0 || coord.second < 0) {
 		return;
 	}
 
-	canvas_[coord.first][coord.second] = elements[element];
+	canvas_[coord.first][coord.second] = elements[type];
+	canvas_[coord.first][coord.second].effect_ = (ElementEffect)status;
 	// std::cout << "finished set canvas" << std::endl;
 }
 
 void Canvas::CanvasReset(const Coordinate &coord) {
-	CanvasSet(coord, OBJECT::VOID);
+	CanvasSet(coord, OBJECT::VOID, OBJECT::NORMAL);
 }
 
 inline void Canvas::ScreenClear() const {
