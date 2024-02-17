@@ -5,7 +5,6 @@
 
 #include <map>
 #include <memory>
-#include <string>
 
 enum ElementColor {
 	RED = 0,

@@ -52,6 +52,13 @@ enum ObjectType {
 
 	OBJ_COUNT
 };
+
+enum ObjectStatus {
+	NORMAL = 0,
+	TARGET,
+
+	STATUS_COUNT
+}
 }  // namespace OBJECT
 
 namespace AGENT {
