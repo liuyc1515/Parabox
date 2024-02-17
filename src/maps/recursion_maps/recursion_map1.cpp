@@ -14,4 +14,6 @@ void RecursionMap1::SetSpecificObjects() {
 	SetObject({3, 3}, OBJECT::RECURSION);
 	SetObject({3, 4}, OBJECT::MAP);
 	SetObject({0, 5}, OBJECT::VOID);
+
+	SetTarget({4, 2});
 }
