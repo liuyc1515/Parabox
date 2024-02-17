@@ -28,15 +28,16 @@ enum ElementEffect {
 struct CanvasElement {
 		char ch_;
 		ElementColor color_;
+		ElementEffect effect_;
 		void operator=(const CanvasElement &element);
 };
 
-const CanvasElement BLANK = {' ', BLACK};
-const CanvasElement WALL = {'W', WHITE};
-const CanvasElement OPERATOR = {'P', YELLOW};
-const CanvasElement BLOCK = {'B', GREEN};
-const CanvasElement INNER = {'M', PURPLE};
-const CanvasElement RECURSION = {'R', DARKGREEN};
+const CanvasElement BLANK = {' ', BLACK, NOEFFECT};
+const CanvasElement WALL = {'W', WHITE, NOEFFECT};
+const CanvasElement OPERATOR = {'P', YELLOW, NOEFFECT};
+const CanvasElement BLOCK = {'B', GREEN, NOEFFECT};
+const CanvasElement INNER = {'M', PURPLE, NOEFFECT};
+const CanvasElement RECURSION = {'R', DARKGREEN, NOEFFECT};
 
 const CanvasElement elements[OBJECT::OBJ_COUNT] = {BLANK, WALL, OPERATOR, BLOCK, INNER, RECURSION};
 

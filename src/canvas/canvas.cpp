@@ -6,6 +6,7 @@ void (*Canvas::ColorPrint_[COLOR_COUNT])(char);
 void CanvasElement::operator=(const CanvasElement &element) {
 	ch_ = element.ch_;
 	color_ = element.color_;
+	effect_ = element.effect_;
 }
 
 Canvas::Canvas(int x, int y) : x_(x), y_(y) {
