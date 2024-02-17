@@ -4,6 +4,14 @@ BaseMap::BaseMap() {
 	std::cout << "start init base map" << std::endl;
 }
 
+void BaseMap::SetTarget(const Coordinate &coord) {
+	if (BaseMap::IsOutOfBorder(coord)) {
+		return;
+	}
+
+	targets_.push_back(coord);
+}
+
 BaseMap::~BaseMap() {
 }
 

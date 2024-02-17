@@ -4,14 +4,17 @@
 #include <utils/types.h>
 
 #include <iostream>
+#include <vector>
 
 class BaseMap {
 	protected:
 		std::map<Coordinate, OBJECT::ObjectType> map_;
+		std::vector<Coordinate> targets_;
 		int x_;
 		int y_;
 		BaseMap();
 		virtual void SetObject(const Coordinate &coord, OBJECT::ObjectType obj) = 0;
+		virtual void SetTarget(const Coordinate &coord);
 
 	public:
 		virtual ~BaseMap();
