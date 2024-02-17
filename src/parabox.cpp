@@ -23,8 +23,14 @@ void Parabox::UpdateCanvas() {
 		// std::cout << "set obj coord (" << tmp_coord.first << ", " <<
 		// tmp_coord.second << ") with type " <<
 		// object_manager_->GetObjectType(object_id) << std::endl;
-		canvas_.CanvasSet(tmp_coord, object_manager_->GetObjectType(object_id), OBJECT::NORMAL);
+		canvas_.CanvasSet(tmp_coord, object_manager_->GetObjectType(object_id), CalcObjectStatus(object_id));
 	}
+}
+
+OBJECT::ObjectStatus Parabox::CalcObjectStatus(uint64_t object_id) const {
+	return map_manager_->IsTarget(map_manager_->GetCurrentMapID(), object_manager_->GetObjectCoord(object_id))
+		? OBJECT::NORMAL
+		: OBJECT::TARGET;
 }
 
 std::unique_ptr<BaseAgent> Parabox::NewAgentByType(AGENT::AgentType agent_type) {

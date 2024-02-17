@@ -20,6 +20,7 @@ class Parabox {
 		std::shared_ptr<const ObjectManager> object_manager_;
 		std::shared_ptr<const MapManager> map_manager_;
 		void UpdateCanvas();
+		OBJECT::ObjectStatus CalcObjectStatus(uint64_t object_id) const;
 
 	public:
 		Parabox(std::unique_ptr<BaseAgent> agent, int x, int y);
