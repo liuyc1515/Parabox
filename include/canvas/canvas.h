@@ -3,6 +3,7 @@
 #include <canvas/color_print.h>
 #include <utils/types.h>
 
+#include <map>
 #include <memory>
 
 enum ElementColor {
@@ -20,7 +21,7 @@ enum ElementColor {
 
 enum ElementEffect {
 	NOEFFECT = 0,
-	UNDERLINE0,
+	UNDERLINE,
 
 	EFFECT_COUNT
 };
@@ -40,6 +41,22 @@ const CanvasElement INNER = {'M', PURPLE, NOEFFECT};
 const CanvasElement RECURSION = {'R', DARKGREEN, NOEFFECT};
 
 const CanvasElement elements[OBJECT::OBJ_COUNT] = {BLANK, WALL, OPERATOR, BLOCK, INNER, RECURSION};
+
+const std::map<ElementColor, int> printed_colors = {
+	{BLACK, 30},
+	{RED, 31},
+	{GREEN, 32},
+	{YELLOW, 33},
+	{BLUE, 34},
+	{PURPLE, 35},
+	{DARKGREEN, 36},
+	{WHITE, 37}
+};
+
+const std::map<ElementEffect, int> printed_effects = {
+	{NOEFFECT, 0},
+	{UNDERLINE, 4}
+};
 
 class Canvas {
 	private:
